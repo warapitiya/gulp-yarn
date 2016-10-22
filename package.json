@@ -1,0 +1,33 @@
+{
+  "name": "gulp-yarn",
+  "version": "0.0.1",
+  "description": "Automatically install yarn, packages/dependencies if the relative configurations are found in the gulp file stream respectively",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test mocha -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/warapitiya/gulp-yarn"
+  },
+  "keywords": [
+    "gulpplugin",
+    "yarn",
+    "install"
+  ],
+  "author": "Malindu Warapitiya <warapitiya93@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/warapitiya/gulp-yarn/issues"
+  },
+  "homepage": "https://github.com/warapitiya/gulp-yarn",
+  "dependencies": {
+    "gulp-util": "^3.0.4",
+    "through2": "^2.0.0",
+    "which": "^1.0.9"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "mocha": "^3.1.2"
+  }
+}
