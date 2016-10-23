@@ -1,3 +1,7 @@
+/**
+ * Created by mwarapitiya on 10/23/16.
+ */
+
 'use strict';
 var through2 = require('through2');
 var gutil = require('gulp-util');
@@ -10,6 +14,11 @@ var commandList = {
     }
 };
 
+/**
+ *
+ * @param opts
+ * @returns {*}
+ */
 module.exports = function install(opts) {
     var toRun = [];
     var count = 0;
@@ -26,9 +35,14 @@ module.exports = function install(opts) {
             if (cmd) {
                 if (opts && opts.production) {
                     cmd.args.push('--production');
+                } else if (opts && opts.dev) {
+                    cmd.args.push('--dev');
                 }
-                if (opts && opts.ignoreScripts) {
-                    cmd.args.push('--ignore-scripts');
+                if (opts && opts.force) {
+                    cmd.args.push('--force');
+                }
+                if (opts && opts.flat) {
+                    cmd.args.push('--flat');
                 }
                 if (opts && opts.args) {
                     formatArguments(opts.args).forEach(function (arg) {
@@ -47,7 +61,7 @@ module.exports = function install(opts) {
                 return callback();
             }
             if (skipInstall()) {
-                log('Skipping install.', 'Run `' + gutil.colors.yellow(formatCommands(toRun)) + '` manually');
+                log('Skipping yarn.', 'Run `' + gutil.colors.yellow(formatCommands(toRun)) + '` manually');
                 return callback();
             } else {
                 toRun.forEach(function (command) {
@@ -70,6 +84,9 @@ module.exports = function install(opts) {
     }
 };
 
+/**
+ * Logger
+ */
 function log() {
     if (isTest()) {
         return;
@@ -77,14 +94,27 @@ function log() {
     gutil.log.apply(gutil, [].slice.call(arguments));
 }
 
+/**
+ * Format commands
+ */
 function formatCommands(cmds) {
     return cmds.map(formatCommand).join(' && ');
 }
 
+/**
+ * Format command
+ * @param command
+ * @returns {string}
+ */
 function formatCommand(command) {
     return command.cmd + ' ' + command.args.join(' ');
 }
 
+/**
+ * Formant Arguments
+ * @param args
+ * @returns {*}
+ */
 function formatArguments(args) {
     if (Array.isArray(args)) {
         args.forEach(function (arg, index, arr) {
@@ -99,6 +129,11 @@ function formatArguments(args) {
     }
 }
 
+/**
+ * Format argument
+ * @param arg
+ * @returns {*}
+ */
 function formatArgument(arg) {
     var result = arg;
     while (!result.match(/--.*/)) {
@@ -107,14 +142,27 @@ function formatArgument(arg) {
     return result;
 }
 
+/**
+ * Skip
+ * @returns {boolean}
+ */
 function skipInstall() {
-    return process.argv.slice(2).indexOf('--skip-install') >= 0;
+    return process.argv.slice(2).indexOf('--skip-yarn') >= 0;
 }
 
+/**
+ * is Test environment
+ * @returns {boolean}
+ */
 function isTest() {
     return process.env.NODE_ENV === 'test';
 }
 
+/**
+ * clone object
+ * @param obj
+ * @returns {*}
+ */
 function clone(obj) {
     if (Array.isArray(obj)) {
         return obj.map(clone);
