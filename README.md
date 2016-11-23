@@ -20,7 +20,7 @@ yarn add gulp-yarn --dev
 ##### In your `gulpfile.js`:
 
 ```javascript
-var yarn = require("gulp-yarn");
+var yarn = require('gulp-yarn');
 
 gulp.src(['./package.json'])
     .pipe(yarn());
@@ -29,10 +29,10 @@ gulp.src(['./package.json'])
 ##### Move to subdirectory
 
 ```javascript
-var yarn = require("gulp-yarn");
+var yarn = require('gulp-yarn');
 
 gulp.src(['./package.json', './yarn.lock'])
-    .pipe(gulp.dest(config.BUILD))
+    .pipe(gulp.dest('./dist'))
     .pipe(yarn({
         production: true
     }));

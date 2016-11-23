@@ -44,6 +44,12 @@ module.exports = function install(opts) {
                 if (opts && opts.flat) {
                     cmd.args.push('--flat');
                 }
+                if (opts && opts.noBinLinks) {
+                    cmd.args.push('--no-bin-links');
+                }
+                if (opts && opts.ignoreEngines) {
+                    cmd.args.push('--ignore-engines');
+                }
                 if (opts && opts.args) {
                     formatArguments(opts.args).forEach(function (arg) {
                         cmd.args.push(arg);

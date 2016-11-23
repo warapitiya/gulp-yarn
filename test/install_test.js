@@ -158,6 +158,56 @@ describe('gulp-yarn', function () {
         stream.end();
     });
 
+    it('should run `yarn --no-bin-links` if stream contains `package.json` and `noBinLinks` option is set', function (done) {
+        var file = fixture('package.json');
+
+        var stream = yarn({noBinLinks: true});
+
+        stream.on('error', function (err) {
+            should.exist(err);
+            done(err);
+        });
+
+        stream.on('data', function () {
+        });
+
+        stream.on('end', function () {
+            commandRunner.run.called.should.equal(1);
+            commandRunner.run.commands[0].cmd.should.equal('yarn');
+            commandRunner.run.commands[0].args.should.eql(['--no-bin-links']);
+            done();
+        });
+
+        stream.write(file);
+
+        stream.end();
+    });
+
+    it('should run `yarn --ignore-engines` if stream contains `package.json` and `ignoreEngines` option is set', function (done) {
+        var file = fixture('package.json');
+
+        var stream = yarn({ignoreEngines: true});
+
+        stream.on('error', function (err) {
+            should.exist(err);
+            done(err);
+        });
+
+        stream.on('data', function () {
+        });
+
+        stream.on('end', function () {
+            commandRunner.run.called.should.equal(1);
+            commandRunner.run.commands[0].cmd.should.equal('yarn');
+            commandRunner.run.commands[0].args.should.eql(['--ignore-engines']);
+            done();
+        });
+
+        stream.write(file);
+
+        stream.end();
+    });
+
     it('should run `yarn --production --flat`', function (done) {
         var file = fixture('package.json');
 
