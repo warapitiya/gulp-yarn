@@ -52,3 +52,7 @@ Only allow one version of a package. On the first run this will prompt you to ch
 
 #### force (--force)
 This refetches all packages, even ones that were previously installed.
+
+#### ignore-engines(--ignore-engines)
+
+#### no-bin-links(--no-bin-links)
