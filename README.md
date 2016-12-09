@@ -71,6 +71,11 @@ cd gulp-yarn/ 	#move to gulp-yarn directory
 yarn 			#install yarn dependencies
 ```
 
+**Run test:**
+```sh
+yarn test		#run mocha test
+```
+
 ## Options
 
 **+ Production**
