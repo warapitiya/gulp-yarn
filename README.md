@@ -30,7 +30,7 @@ yarn add gulp-yarn --dev
 ```
 
 
-## Using Yarn
+## Using Gulp-Yarn
 
 **Basic:** Better performance when in same directory.
 
