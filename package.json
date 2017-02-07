@@ -4,7 +4,7 @@
   "description": "Automatically install yarn, packages/dependencies.",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha -R spec",
+    "test": "NODE_ENV=test istanbul cover _mocha -R spec test/**/*.js ",
     "lint": "xo index.js",
     "lint:fix": "xo index.js --fix"
   },
