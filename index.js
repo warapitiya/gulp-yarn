@@ -3,10 +3,12 @@
  */
 
 'use strict';
+var path = require('path');
 var through2 = require('through2');
 var gutil = require('gulp-util');
-var path = require('path');
+var commands = require('./lib/commands');
 var commandRunner = require('./lib/commandRunner');
+
 var commandList = {
     'package.json': {
         cmd: 'yarn',
@@ -15,11 +17,11 @@ var commandList = {
 };
 
 /**
- *
+ * Install
  * @param opts
  * @returns {*}
  */
-module.exports = function install(opts) {
+module.exports = function (opts) {
     var toRun = [];
     var count = 0;
 
@@ -33,23 +35,18 @@ module.exports = function install(opts) {
             var cmd = clone(commandList[path.basename(file.path)]);
 
             if (cmd) {
-                if (opts && opts.production) {
-                    cmd.args.push('--production');
-                } else if (opts && opts.dev) {
-                    cmd.args.push('--dev');
+                if (opts) {
+                    for (var key in opts) {
+                        if (commands.hasOwnProperty(key)) {
+                            cmd.args.push(commands[key]);
+                        } else {
+                            log('Warning!.', 'Command `' + gutil.colors.yellow(key) + '` not supported by' +
+                                ' gulp-yarn.');
+                            return callback(new Error('Command not supported.'));
+                        }
+                    }
                 }
-                if (opts && opts.force) {
-                    cmd.args.push('--force');
-                }
-                if (opts && opts.flat) {
-                    cmd.args.push('--flat');
-                }
-                if (opts && opts.noBinLinks) {
-                    cmd.args.push('--no-bin-links');
-                }
-                if (opts && opts.ignoreEngines) {
-                    cmd.args.push('--ignore-engines');
-                }
+
                 if (opts && opts.args) {
                     formatArguments(opts.args).forEach(function (arg) {
                         cmd.args.push(arg);
@@ -69,17 +66,16 @@ module.exports = function install(opts) {
             if (skipInstall()) {
                 log('Skipping yarn.', 'Run `' + gutil.colors.yellow(formatCommands(toRun)) + '` manually');
                 return callback();
-            } else {
-                toRun.forEach(function (command) {
-                    commandRunner.run(command, function (err) {
-                        if (err) {
-                            log(err.message, ', run `' + gutil.colors.yellow(formatCommand(command)) + '` manually');
-                            return callback(err);
-                        }
-                        done(callback, toRun.length);
-                    });
-                });
             }
+            toRun.forEach(function (command) {
+                commandRunner.run(command, function (err) {
+                    if (err) {
+                        log(err.message, ', run `' + gutil.colors.yellow(formatCommand(command)) + '` manually');
+                        return callback(err);
+                    }
+                    done(callback, toRun.length);
+                });
+            });
         }
     );
 
@@ -129,10 +125,9 @@ function formatArguments(args) {
         return args;
     } else if (typeof args === 'string' || args instanceof String) {
         return [formatArgument(args)];
-    } else {
-        log('Arguments are not passed in a valid format: ' + args);
-        return [];
     }
+    log('Arguments are not passed in a valid format: ' + args);
+    return [];
 }
 
 /**
@@ -178,7 +173,6 @@ function clone(obj) {
             copy[key] = clone(obj[key]);
         });
         return copy;
-    } else {
-        return obj;
     }
+    return obj;
 }

@@ -12,6 +12,9 @@ Because we <img alt="emoji=heart" src="https://github.com/warapitiya/assets/blob
 
 <p align="center">
   <a href="https://travis-ci.org/warapitiya/gulp-yarn"><img alt="Travis Status" src="https://travis-ci.org/warapitiya/gulp-yarn.svg?branch=master"></a>
+  <a href="https://www.npmjs.com/package/gulp-yarn"><img src="https://img.shields.io/npm/v/gulp-yarn.svg" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/gulp-yarn"><img src="https://img.shields.io/npm/dt/gulp-yarn.svg" alt="npm downloads"></a>
+  <a href="https://github.com/sindresorhus/xo"><img src="https://img.shields.io/badge/code_style-XO-5ed9c7.svg" alt="xo"></a>
 </p>
 
 ---
@@ -53,12 +56,14 @@ gulp.src(['./package.json', './yarn.lock'])
     }));
 ```
 
-
 ## Contributing to Gulp-Yarn
 
 Contributions are always welcome, no matter how large or small. Before contributing.
 
 ## Test
+```sh
+yarn test		#run mocha test
+```
 
 **Clone:**
 ```sh

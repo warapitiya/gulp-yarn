@@ -4,7 +4,9 @@
   "description": "Automatically install yarn, packages/dependencies.",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha -R spec"
+    "test": "NODE_ENV=test mocha -R spec",
+    "lint": "xo index.js",
+    "lint:fix": "xo index.js --fix"
   },
   "repository": {
     "type": "git",
@@ -13,6 +15,8 @@
   "keywords": [
     "gulpplugin",
     "yarn",
+    "yarnpkg",
+    "gulp",
     "install"
   ],
   "author": "Malindu Warapitiya <warapitiya93@gmail.com>",
@@ -28,6 +32,22 @@
   },
   "devDependencies": {
     "chai": "^3.2.0",
-    "mocha": "^3.1.2"
+    "mocha": "^3.1.2",
+    "xo": "^0.17.1"
+  },
+  "xo": {
+    "envs": [
+      "node"
+    ],
+    "globals": [],
+    "rules": {
+      "indent": "off",
+      "unicorn/filename-case": [
+        "error",
+        {
+          "case": "camelCase"
+        }
+      ]
+    }
   }
 }
