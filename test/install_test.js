@@ -235,6 +235,31 @@ describe('gulp-yarn', function () {
             stream.end();
         });
 
+    it('should run `yarn --ignore-scripts` if stream contains `package.json` and `ignoreScripts` option is set', function (done) {
+        var file = fixture('package.json');
+
+        var stream = yarn({ignoreScripts: true});
+
+        stream.on('error', function (err) {
+            should.exist(err);
+            done(err);
+        });
+
+        stream.on('data', function () {
+        });
+
+        stream.on('end', function () {
+            commandRunner.run.called.should.equal(1);
+            commandRunner.run.commands[0].cmd.should.equal('yarn');
+            commandRunner.run.commands[0].args.should.eql(['--ignore-scripts']);
+            done();
+        });
+
+        stream.write(file);
+
+        stream.end();
+    });
+
     it('should run `yarn --no-progress` to disable progress bar', function (done) {
         var file = fixture('package.json');
 
