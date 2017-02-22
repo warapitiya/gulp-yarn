@@ -70,6 +70,7 @@ gulp.task('yarn', function() {
 | noBinLinks    | None of `node_module` bin links getting created.                                                                                                                       | Boolean |
 | noProgress    | Disable progress bar                                                                                                                                                   | Boolean |
 | noLockfile    | Don't read or generate a lockfile                                                                                                                                      | Boolean |
+| ignoreScripts | Don't run npm scripts during installation                                                                                                                              | Boolean |
 
 ## Test
 ```sh
