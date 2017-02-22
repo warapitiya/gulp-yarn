@@ -1,6 +1,6 @@
 {
   "name": "gulp-yarn",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Automatically install yarn, packages/dependencies.",
   "main": "index.js",
   "scripts": {
