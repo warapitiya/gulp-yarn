@@ -337,6 +337,32 @@ describe('gulp-yarn', () => {
 
         stream.end();
     });
+
+    it('should run commandRunner', done => {
+        const commands = {
+            cmd: 'yarn',
+            args: ['--version'],
+            cwd: __dirname
+        };
+        originalRun(commands, (error) => {
+            expect(error).not.to.be.an('error');
+            done();
+        });
+
+    });
+
+    it('should not run commandRunner', done => {
+        const commands = {
+            cmd: 'yarnTest',
+            args: ['--version'],
+            cwd: __dirname
+        };
+        originalRun(commands, (error) => {
+            expect(error).to.be.an('error');
+            done();
+        });
+
+    });
 });
 
 function mockRunner() {
