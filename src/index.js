@@ -145,7 +145,7 @@ function formatArgument(arg) {
  * @returns {boolean}
  */
 function skipInstall() {
-    return process.argv.slice(2).includes('--skip-yarn');
+    return process.argv.slice(2).indexOf('--skip-yarn') >= 0;
 }
 
 /**
