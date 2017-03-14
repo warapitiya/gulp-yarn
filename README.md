@@ -16,11 +16,10 @@ Because we <img alt="emoji=heart" src="https://github.com/warapitiya/assets/blob
   <a href="https://www.npmjs.com/package/gulp-yarn"><img src="https://img.shields.io/npm/v/gulp-yarn.svg" alt="npm version"></a>
   <a href="https://www.npmjs.com/package/gulp-yarn"><img src="https://img.shields.io/npm/dt/gulp-yarn.svg" alt="npm downloads"></a>
   <a href="https://github.com/sindresorhus/xo"><img src="https://img.shields.io/badge/code_style-XO-5ed9c7.svg" alt="xo"></a>
+  <a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/warapitiya/gulp-yarn.svg" alt="Greenkeeper badge"></a>
 </p>
 
 ---
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/warapitiya/gulp-yarn.svg)](https://greenkeeper.io/)
 
 ## Installation
 
