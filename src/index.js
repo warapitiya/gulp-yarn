@@ -1,15 +1,13 @@
 /**
  * Created by mwarapitiya on 10/23/16.
  */
+import path from 'path';
+import through2 from 'through2';
+import gutil from 'gulp-util';
+import commands from './utils/commands';
+import commandRunner from './utils/commandRunner';
 
-'use strict';
-var path = require('path');
-var through2 = require('through2');
-var gutil = require('gulp-util');
-var commands = require('./lib/commands');
-var commandRunner = require('./lib/commandRunner');
-
-var commandList = {
+const commandList = {
     'package.json': {
         cmd: 'yarn',
         args: []
@@ -21,9 +19,9 @@ var commandList = {
  * @param opts
  * @returns {*}
  */
-module.exports = function (opts) {
-    var toRun = [];
-    var count = 0;
+export default opts => {
+    const toRun = [];
+    let count = 0;
 
     return through2({
             objectMode: true
@@ -32,23 +30,22 @@ module.exports = function (opts) {
             if (!file.path) {
                 callback();
             }
-            var cmd = clone(commandList[path.basename(file.path)]);
+            const cmd = clone(commandList[path.basename(file.path)]);
 
             if (cmd) {
                 if (opts) {
-                    for (var key in opts) {
+                    for (const key in opts) {
                         if (commands.hasOwnProperty(key)) {
                             cmd.args.push(commands[key]);
                         } else {
-                            log('Warning!.', 'Command `' + gutil.colors.yellow(key) + '` not supported by' +
-                                ' gulp-yarn.');
+                            log('Warning!.', `Command \`${gutil.colors.yellow(key)}\` not supported by gulp-yarn.`);
                             return callback(new Error('Command not supported.'));
                         }
                     }
                 }
 
                 if (opts && opts.args) {
-                    formatArguments(opts.args).forEach(function (arg) {
+                    formatArguments(opts.args).forEach(arg => {
                         cmd.args.push(arg);
                     });
                 }
@@ -59,18 +56,18 @@ module.exports = function (opts) {
             this.push(file);
             callback();
         },
-        function (callback) {
+        callback => {
             if (!toRun.length) {
                 return callback();
             }
             if (skipInstall()) {
-                log('Skipping yarn.', 'Run `' + gutil.colors.yellow(formatCommands(toRun)) + '` manually');
+                log('Skipping yarn.', `Run \`${gutil.colors.yellow(formatCommands(toRun))}\` manually`);
                 return callback();
             }
-            toRun.forEach(function (command) {
-                commandRunner.run(command, function (err) {
+            toRun.forEach(command => {
+                commandRunner.run(command, err => {
                     if (err) {
-                        log(err.message, ', run `' + gutil.colors.yellow(formatCommand(command)) + '` manually');
+                        log(err.message, `, run \`${gutil.colors.yellow(formatCommand(command))}\` manually`);
                         return callback(err);
                     }
                     done(callback, toRun.length);
@@ -93,7 +90,7 @@ function log() {
     if (isTest()) {
         return;
     }
-    gutil.log.apply(gutil, [].slice.call(arguments));
+    gutil.log(...[].slice.call(arguments));
 }
 
 /**
@@ -109,7 +106,7 @@ function formatCommands(cmds) {
  * @returns {string}
  */
 function formatCommand(command) {
-    return command.cmd + ' ' + command.args.join(' ');
+    return `${command.cmd} ${command.args.join(' ')}`;
 }
 
 /**
@@ -119,14 +116,14 @@ function formatCommand(command) {
  */
 function formatArguments(args) {
     if (Array.isArray(args)) {
-        args.forEach(function (arg, index, arr) {
+        args.forEach((arg, index, arr) => {
             arr[index] = formatArgument(arg);
         });
         return args;
     } else if (typeof args === 'string' || args instanceof String) {
         return [formatArgument(args)];
     }
-    log('Arguments are not passed in a valid format: ' + args);
+    log(`Arguments are not passed in a valid format: ${args}`);
     return [];
 }
 
@@ -136,9 +133,9 @@ function formatArguments(args) {
  * @returns {*}
  */
 function formatArgument(arg) {
-    var result = arg;
+    let result = arg;
     while (!result.match(/--.*/)) {
-        result = '-' + result;
+        result = `-${result}`;
     }
     return result;
 }
@@ -148,7 +145,7 @@ function formatArgument(arg) {
  * @returns {boolean}
  */
 function skipInstall() {
-    return process.argv.slice(2).indexOf('--skip-yarn') >= 0;
+    return process.argv.slice(2).includes('--skip-yarn');
 }
 
 /**
@@ -168,8 +165,8 @@ function clone(obj) {
     if (Array.isArray(obj)) {
         return obj.map(clone);
     } else if (typeof obj === 'object') {
-        var copy = {};
-        Object.keys(obj).forEach(function (key) {
+        const copy = {};
+        Object.keys(obj).forEach(key => {
             copy[key] = clone(obj[key]);
         });
         return copy;

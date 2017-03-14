@@ -1,18 +1,17 @@
 /* jshint camelcase: false, strict: false */
 /* global describe, beforeEach, it */
 
-var chai = require('chai');
-var should = chai.should();
-var expect = chai.expect;
-var util = require('util');
-var gutil = require('gulp-util');
-var path = require('path');
-var commandRunner = require('../lib/commandRunner');
-var yarn = require('../index');
-var args = process.argv.slice();
+import chai from 'chai';
+import gutil from 'gulp-util';
+import path from 'path';
+import commandRunner from '../lib/utils/commandRunner';
+import yarn from '../lib/index';
+const should = chai.should();
+const expect = chai.expect;
+const args = process.argv.slice();
 
 function fixture(file) {
-    var filepath = path.join(__dirname, file);
+    const filepath = path.join(__dirname, file);
     return new gutil.File({
         path: filepath,
         cwd: __dirname,
@@ -21,33 +20,33 @@ function fixture(file) {
     });
 }
 
-var originalRun;
+let originalRun;
 
-describe('gulp-yarn', function () {
-    beforeEach(function () {
+describe('gulp-yarn', () => {
+    beforeEach(() => {
         originalRun = commandRunner.run;
         commandRunner.run = mockRunner();
         process.argv = args;
     });
 
-    afterEach(function () {
+    afterEach(() => {
         commandRunner.run = originalRun;
     });
 
-    it('should run `yarn` if stream contains `package.json`', function (done) {
-        var file = fixture('package.json');
+    it('should run `yarn` if stream contains `package.json`', done => {
+        const file = fixture('package.json');
 
-        var stream = yarn();
+        const stream = yarn();
 
-        stream.on('error', function (err) {
+        stream.on('error', err => {
             should.exist(err);
             done(err);
         });
 
-        stream.on('data', function () {
+        stream.on('data', () => {
         });
 
-        stream.on('end', function () {
+        stream.on('end', () => {
             commandRunner.run.called.should.equal(1);
             commandRunner.run.commands[0].cmd.should.equal('yarn');
             commandRunner.run.commands[0].args.should.eql([]);
@@ -59,19 +58,19 @@ describe('gulp-yarn', function () {
         stream.end();
     });
 
-    it('should not run `yarn`', function (done) {
-        var file = fixture('package.json');
+    it('should not run `yarn`', done => {
+        const file = fixture('package.json');
 
-        var stream = yarn({
+        const stream = yarn({
             unknown: true
         });
 
-        stream.on('error', function (err) {
+        stream.on('error', err => {
             expect(err).to.be.an('error');
             done();
         });
 
-        stream.on('end', function () {
+        stream.on('end', () => {
             commandRunner.run.called.should.equal(0);
             commandRunner.run.commands[0].args.should.eql([]);
             done();
@@ -83,20 +82,20 @@ describe('gulp-yarn', function () {
     });
 
     it('should run `yarn --production` if stream contains `package.json` and `production` option is set',
-        function (done) {
-            var file = fixture('package.json');
+        done => {
+            const file = fixture('package.json');
 
-            var stream = yarn({production: true});
+            const stream = yarn({production: true});
 
-            stream.on('error', function (err) {
+            stream.on('error', err => {
                 should.exist(err);
                 done(err);
             });
 
-            stream.on('data', function () {
+            stream.on('data', () => {
             });
 
-            stream.on('end', function () {
+            stream.on('end', () => {
                 commandRunner.run.called.should.equal(1);
                 commandRunner.run.commands[0].cmd.should.equal('yarn');
                 commandRunner.run.commands[0].args.should.eql(['--production']);
@@ -108,20 +107,20 @@ describe('gulp-yarn', function () {
             stream.end();
         });
 
-    it('should run `yarn --flat` if stream contains `package.json` and `flat` option is set', function (done) {
-        var file = fixture('package.json');
+    it('should run `yarn --flat` if stream contains `package.json` and `flat` option is set', done => {
+        const file = fixture('package.json');
 
-        var stream = yarn({flat: true});
+        const stream = yarn({flat: true});
 
-        stream.on('error', function (err) {
+        stream.on('error', err => {
             should.exist(err);
             done(err);
         });
 
-        stream.on('data', function () {
+        stream.on('data', () => {
         });
 
-        stream.on('end', function () {
+        stream.on('end', () => {
             commandRunner.run.called.should.equal(1);
             commandRunner.run.commands[0].cmd.should.equal('yarn');
             commandRunner.run.commands[0].args.should.eql(['--flat']);
@@ -133,20 +132,20 @@ describe('gulp-yarn', function () {
         stream.end();
     });
 
-    it('should run `yarn --dev` if stream contains `package.json` and `dev` option is set', function (done) {
-        var file = fixture('package.json');
+    it('should run `yarn --dev` if stream contains `package.json` and `dev` option is set', done => {
+        const file = fixture('package.json');
 
-        var stream = yarn({dev: true});
+        const stream = yarn({dev: true});
 
-        stream.on('error', function (err) {
+        stream.on('error', err => {
             should.exist(err);
             done(err);
         });
 
-        stream.on('data', function () {
+        stream.on('data', () => {
         });
 
-        stream.on('end', function () {
+        stream.on('end', () => {
             commandRunner.run.called.should.equal(1);
             commandRunner.run.commands[0].cmd.should.equal('yarn');
             commandRunner.run.commands[0].args.should.eql(['--dev']);
@@ -158,20 +157,20 @@ describe('gulp-yarn', function () {
         stream.end();
     });
 
-    it('should run `yarn --force` if stream contains `package.json` and `force` option is set', function (done) {
-        var file = fixture('package.json');
+    it('should run `yarn --force` if stream contains `package.json` and `force` option is set', done => {
+        const file = fixture('package.json');
 
-        var stream = yarn({force: true});
+        const stream = yarn({force: true});
 
-        stream.on('error', function (err) {
+        stream.on('error', err => {
             should.exist(err);
             done(err);
         });
 
-        stream.on('data', function () {
+        stream.on('data', () => {
         });
 
-        stream.on('end', function () {
+        stream.on('end', () => {
             commandRunner.run.called.should.equal(1);
             commandRunner.run.commands[0].cmd.should.equal('yarn');
             commandRunner.run.commands[0].args.should.eql(['--force']);
@@ -184,20 +183,20 @@ describe('gulp-yarn', function () {
     });
 
     it('should run `yarn --no-bin-links` if stream contains `package.json` and `noBinLinks` option is set',
-        function (done) {
-            var file = fixture('package.json');
+        done => {
+            const file = fixture('package.json');
 
-            var stream = yarn({noBinLinks: true});
+            const stream = yarn({noBinLinks: true});
 
-            stream.on('error', function (err) {
+            stream.on('error', err => {
                 should.exist(err);
                 done(err);
             });
 
-            stream.on('data', function () {
+            stream.on('data', () => {
             });
 
-            stream.on('end', function () {
+            stream.on('end', () => {
                 commandRunner.run.called.should.equal(1);
                 commandRunner.run.commands[0].cmd.should.equal('yarn');
                 commandRunner.run.commands[0].args.should.eql(['--no-bin-links']);
@@ -210,20 +209,20 @@ describe('gulp-yarn', function () {
         });
 
     it('should run `yarn --ignore-engines` if stream contains `package.json` and `ignoreEngines` option is set',
-        function (done) {
-            var file = fixture('package.json');
+        done => {
+            const file = fixture('package.json');
 
-            var stream = yarn({ignoreEngines: true});
+            const stream = yarn({ignoreEngines: true});
 
-            stream.on('error', function (err) {
+            stream.on('error', err => {
                 should.exist(err);
                 done(err);
             });
 
-            stream.on('data', function () {
+            stream.on('data', () => {
             });
 
-            stream.on('end', function () {
+            stream.on('end', () => {
                 commandRunner.run.called.should.equal(1);
                 commandRunner.run.commands[0].cmd.should.equal('yarn');
                 commandRunner.run.commands[0].args.should.eql(['--ignore-engines']);
@@ -235,45 +234,46 @@ describe('gulp-yarn', function () {
             stream.end();
         });
 
-    it('should run `yarn --ignore-scripts` if stream contains `package.json` and `ignoreScripts` option is set', function (done) {
-        var file = fixture('package.json');
+    it('should run `yarn --ignore-scripts` if stream contains `package.json` and `ignoreScripts` option is set',
+        done => {
+            const file = fixture('package.json');
 
-        var stream = yarn({ignoreScripts: true});
+            const stream = yarn({ignoreScripts: true});
 
-        stream.on('error', function (err) {
+            stream.on('error', err => {
+                should.exist(err);
+                done(err);
+            });
+
+            stream.on('data', () => {
+            });
+
+            stream.on('end', () => {
+                commandRunner.run.called.should.equal(1);
+                commandRunner.run.commands[0].cmd.should.equal('yarn');
+                commandRunner.run.commands[0].args.should.eql(['--ignore-scripts']);
+                done();
+            });
+
+            stream.write(file);
+
+            stream.end();
+        });
+
+    it('should run `yarn --no-progress` to disable progress bar', done => {
+        const file = fixture('package.json');
+
+        const stream = yarn({noProgress: true});
+
+        stream.on('error', err => {
             should.exist(err);
             done(err);
         });
 
-        stream.on('data', function () {
+        stream.on('data', () => {
         });
 
-        stream.on('end', function () {
-            commandRunner.run.called.should.equal(1);
-            commandRunner.run.commands[0].cmd.should.equal('yarn');
-            commandRunner.run.commands[0].args.should.eql(['--ignore-scripts']);
-            done();
-        });
-
-        stream.write(file);
-
-        stream.end();
-    });
-
-    it('should run `yarn --no-progress` to disable progress bar', function (done) {
-        var file = fixture('package.json');
-
-        var stream = yarn({noProgress: true});
-
-        stream.on('error', function (err) {
-            should.exist(err);
-            done(err);
-        });
-
-        stream.on('data', function () {
-        });
-
-        stream.on('end', function () {
+        stream.on('end', () => {
             commandRunner.run.called.should.equal(1);
             commandRunner.run.commands[0].cmd.should.equal('yarn');
             commandRunner.run.commands[0].args.should.eql(['--no-progress']);
@@ -285,20 +285,20 @@ describe('gulp-yarn', function () {
         stream.end();
     });
 
-    it('should run `yarn --no-lockfile` to don`t read or generate a lockfile', function (done) {
-        var file = fixture('package.json');
+    it('should run `yarn --no-lockfile` to don`t read or generate a lockfile', done => {
+        const file = fixture('package.json');
 
-        var stream = yarn({noLockfile: true});
+        const stream = yarn({noLockfile: true});
 
-        stream.on('error', function (err) {
+        stream.on('error', err => {
             should.exist(err);
             done(err);
         });
 
-        stream.on('data', function () {
+        stream.on('data', () => {
         });
 
-        stream.on('end', function () {
+        stream.on('end', () => {
             commandRunner.run.called.should.equal(1);
             commandRunner.run.commands[0].cmd.should.equal('yarn');
             commandRunner.run.commands[0].args.should.eql(['--no-lockfile']);
@@ -310,23 +310,23 @@ describe('gulp-yarn', function () {
         stream.end();
     });
 
-    it('should run `yarn --production --flat`', function (done) {
-        var file = fixture('package.json');
+    it('should run `yarn --production --flat`', done => {
+        const file = fixture('package.json');
 
-        var stream = yarn({
+        const stream = yarn({
             production: true,
             flat: true
         });
 
-        stream.on('error', function (err) {
+        stream.on('error', err => {
             should.exist(err);
             done(err);
         });
 
-        stream.on('data', function () {
+        stream.on('data', () => {
         });
 
-        stream.on('end', function () {
+        stream.on('end', () => {
             commandRunner.run.called.should.equal(1);
             commandRunner.run.commands[0].cmd.should.equal('yarn');
             commandRunner.run.commands[0].args.should.eql(['--production', '--flat']);
@@ -340,7 +340,7 @@ describe('gulp-yarn', function () {
 });
 
 function mockRunner() {
-    var mock = function mock(cmd, cb) {
+    const mock = function mock(cmd, cb) {
         mock.called += 1;
         mock.commands.push(cmd);
         cb();

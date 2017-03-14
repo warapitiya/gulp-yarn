@@ -2,11 +2,13 @@
   "name": "gulp-yarn",
   "version": "0.1.1",
   "description": "Automatically install yarn, packages/dependencies.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "NODE_ENV=test istanbul cover _mocha -R spec test/**/*.js ",
-    "lint": "xo index.js",
-    "lint:fix": "xo index.js --fix"
+    "test": "NODE_ENV=test istanbul cover _mocha -R test/**/*.js -- --compilers js:babel-register",
+    "lint": "xo src/**/*.js",
+    "lint:fix": "xo src/**/*.js --fix",
+    "build": "babel src --out-dir lib",
+    "watch": "babel src --out-dir lib --watch"
   },
   "repository": {
     "type": "git",
@@ -31,6 +33,9 @@
     "which": "^1.0.9"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-register": "^6.24.0",
     "chai": "^3.2.0",
     "coveralls": "^2.11.16",
     "istanbul": "^0.4.5",
@@ -43,7 +48,6 @@
     ],
     "globals": [],
     "rules": {
-      "indent": "off",
       "unicorn/filename-case": [
         "error",
         {
