@@ -4,7 +4,7 @@
   "description": "Automatically install yarn, packages/dependencies.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "NODE_ENV=test istanbul cover _mocha -R test/**/*.js -- --compilers js:babel-register",
+    "test": "npm run build && NODE_ENV=test istanbul cover _mocha -R test/**/*.js -- --compilers js:babel-register",
     "lint": "xo src/**/*.js",
     "lint:fix": "xo src/**/*.js --fix",
     "build": "babel src --out-dir lib",
