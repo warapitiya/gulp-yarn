@@ -38,6 +38,9 @@ export default opts => {
                         if (commands.hasOwnProperty(key)) {
                             cmd.args.push(commands[key]);
                         } else {
+                            if (key === 'args') {
+                                continue;
+                            }
                             log('Warning!.', `Command \`${gutil.colors.yellow(key)}\` not supported by gulp-yarn.`);
                             return callback(new Error('Command not supported.'));
                         }
