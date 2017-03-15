@@ -338,7 +338,7 @@ describe('gulp-yarn', () => {
         stream.end();
     });
 
-    it('should run `yarn --version` with args property', done => {
+    it('should run `yarn --version` with Array of `args` property', done => {
         const file = fixture('package.json');
 
         const stream = yarn({
@@ -367,14 +367,37 @@ describe('gulp-yarn', () => {
         stream.end();
     });
 
+    it('should run `yarn --version` with String of `args` property', done => {
+        const file = fixture('package.json');
+
+        const stream = yarn({
+            args: '--version'
+        });
+
+        stream.on('error', err => {
+            should.exist(err);
+            done(err);
+        });
+
+        stream.on('data', () => {
+        });
+
+        stream.on('end', () => {
+            commandRunner.run.called.should.equal(1);
+            commandRunner.run.commands[0].cmd.should.equal('yarn');
+            commandRunner.run.commands[0].args.should.eql(['--version']);
+            done();
+        });
+
+        stream.write(file);
+
+        stream.end();
+    });
+
     it('should not run with invalid `package.json`', done => {
         const file = fixture('package123.json');
 
-        const stream = yarn({
-            args: [
-                '--version'
-            ]
-        });
+        const stream = yarn();
 
         stream.on('error', err => {
             should.exist(err);
@@ -421,8 +444,12 @@ describe('gulp-yarn', () => {
     });
 });
 
+/**
+ * mock runner function
+ * @returns {mock}
+ */
 function mockRunner() {
-    const mock = function mock(cmd, cb) {
+    const mock = function (cmd, cb) {
         mock.called += 1;
         mock.commands.push(cmd);
         cb();

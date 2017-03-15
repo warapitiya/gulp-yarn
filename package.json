@@ -8,7 +8,8 @@
     "lint": "xo src/**/*.js",
     "lint:fix": "xo src/**/*.js --fix",
     "build": "babel src --out-dir lib",
-    "watch": "babel src --out-dir lib --watch"
+    "watch": "babel src --out-dir lib --watch",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "repository": {
     "type": "git",
