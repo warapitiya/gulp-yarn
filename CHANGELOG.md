@@ -1,3 +1,19 @@
+<a name="1.0.0-alpha.2"></a>
+# [1.0.0-alpha.2](https://github.com/warapitiya/gulp-yarn/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2017-03-15)
+
+
+### Bug Fixes
+
+* babel module.export issue with `babel-plugin-add-module-exports` ([d235360](https://github.com/warapitiya/gulp-yarn/commit/d235360))
+* validate commands boolean values ([63f2f12](https://github.com/warapitiya/gulp-yarn/commit/63f2f12))
+
+
+### Features
+
+* add support for args property ([88c4892](https://github.com/warapitiya/gulp-yarn/commit/88c4892))
+
+
+
 <a name="1.0.0-alpha.1"></a>
 # [1.0.0-alpha.1](https://github.com/warapitiya/gulp-yarn/compare/v0.1.1...v1.0.0-alpha.1) (2017-03-14)
 
