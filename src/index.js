@@ -35,7 +35,7 @@ export default opts => {
             if (cmd) {
                 if (opts) {
                     for (const key in opts) {
-                        if (commands.hasOwnProperty(key)) {
+                        if (commands.hasOwnProperty(key) && opts[key] === true) {
                             cmd.args.push(commands[key]);
                         } else {
                             if (key === 'args') {
@@ -45,12 +45,12 @@ export default opts => {
                             return callback(new Error('Command not supported.'));
                         }
                     }
-                }
 
-                if (opts && opts.args) {
-                    formatArguments(opts.args).forEach(arg => {
-                        cmd.args.push(arg);
-                    });
+                    if (opts.args) {
+                        formatArguments(opts.args).forEach(arg => {
+                            cmd.args.push(arg);
+                        });
+                    }
                 }
 
                 cmd.cwd = path.dirname(file.path);
