@@ -338,6 +338,62 @@ describe('gulp-yarn', () => {
         stream.end();
     });
 
+    it('should run `yarn --version` with args property', done => {
+        const file = fixture('package.json');
+
+        const stream = yarn({
+            args: [
+                '--version'
+            ]
+        });
+
+        stream.on('error', err => {
+            should.exist(err);
+            done(err);
+        });
+
+        stream.on('data', () => {
+        });
+
+        stream.on('end', () => {
+            commandRunner.run.called.should.equal(1);
+            commandRunner.run.commands[0].cmd.should.equal('yarn');
+            commandRunner.run.commands[0].args.should.eql(['--version']);
+            done();
+        });
+
+        stream.write(file);
+
+        stream.end();
+    });
+
+    it('should not run with invalid `package.json`', done => {
+        const file = fixture('package123.json');
+
+        const stream = yarn({
+            args: [
+                '--version'
+            ]
+        });
+
+        stream.on('error', err => {
+            should.exist(err);
+            done(err);
+        });
+
+        stream.on('data', () => {
+        });
+
+        stream.on('end', () => {
+            commandRunner.run.called.should.equal(0);
+            done();
+        });
+
+        stream.write(file);
+
+        stream.end();
+    });
+
     it('should run commandRunner', done => {
         const commands = {
             cmd: 'yarn',
