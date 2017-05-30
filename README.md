@@ -72,6 +72,7 @@ gulp.task('yarn', function() {
 | noProgress    | Disable progress bar                                                                                                                                                   | Boolean |
 | noLockfile    | Don't read or generate a lockfile                                                                                                                                      | Boolean |
 | ignoreScripts | Don't run npm scripts during installation                                                                                                                              | Boolean |
+| nonInteractive| Using the '--non-interactive' flag of yarn to avoid that during the resolution (yarn install) a user input is needed. [2770](https://github.com/yarnpkg/yarn/pull/2770)| Boolean | 
 
 ## Test
 ```sh
