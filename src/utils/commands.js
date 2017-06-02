@@ -11,5 +11,6 @@ export default {
 	ignoreEngines: '--ignore-engines',
 	noProgress: '--no-progress',
 	noLockfile: '--no-lockfile',
-	ignoreScripts: '--ignore-scripts'
+	ignoreScripts: '--ignore-scripts',
+	nonInteractive: '--non-interactive'
 };
