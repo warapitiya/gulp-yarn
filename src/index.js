@@ -27,6 +27,25 @@ export default opts => {
             objectMode: true
         },
         function (file, enc, callback) {
+            const flush = callback => {
+                if (!toRun.length) {
+                    return callback();
+                }
+                if (skipInstall()) {
+                    log('Skipping yarn.', `Run \`${gutil.colors.yellow(formatCommands(toRun))}\` manually`);
+                    return callback();
+                }
+                toRun.forEach(command => {
+                    commandRunner.run(command, err => {
+                        if (err) {
+                            log(err.message, `, run \`${gutil.colors.yellow(formatCommand(command))}\` manually`);
+                            return callback(err);
+                        }
+                        done(callback, toRun.length);
+                    });
+                });
+            };
+
             if (!file.path) {
                 callback();
             }
@@ -57,25 +76,7 @@ export default opts => {
                 toRun.push(cmd);
             }
             this.push(file);
-            callback();
-        },
-        callback => {
-            if (!toRun.length) {
-                return callback();
-            }
-            if (skipInstall()) {
-                log('Skipping yarn.', `Run \`${gutil.colors.yellow(formatCommands(toRun))}\` manually`);
-                return callback();
-            }
-            toRun.forEach(command => {
-                commandRunner.run(command, err => {
-                    if (err) {
-                        log(err.message, `, run \`${gutil.colors.yellow(formatCommand(command))}\` manually`);
-                        return callback(err);
-                    }
-                    done(callback, toRun.length);
-                });
-            });
+            flush(callback);
         }
     );
 
