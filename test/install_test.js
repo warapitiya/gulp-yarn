@@ -2,7 +2,7 @@
 /* global describe, beforeEach, it */
 
 import chai from 'chai';
-import gutil from 'gulp-util';
+import Vinyl from 'vinyl';
 import path from 'path';
 import commandRunner from '../lib/utils/commandRunner';
 import yarn from '../lib/index';
@@ -12,7 +12,7 @@ const args = process.argv.slice();
 
 function fixture(file) {
     const filepath = path.join(__dirname, file);
-    return new gutil.File({
+    return new Vinyl({
         path: filepath,
         cwd: __dirname,
         base: path.join(__dirname, path.dirname(file)),

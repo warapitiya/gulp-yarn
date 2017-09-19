@@ -3,7 +3,8 @@
  */
 import path from 'path';
 import through2 from 'through2';
-import gutil from 'gulp-util';
+import chalk from 'chalk';
+import logger from 'gulplog';
 import commands from './utils/commands';
 import commandRunner from './utils/commandRunner';
 
@@ -32,13 +33,13 @@ export default opts => {
                     return callback();
                 }
                 if (skipInstall()) {
-                    log('Skipping yarn.', `Run \`${gutil.colors.yellow(formatCommands(toRun))}\` manually`);
+                    log('Skipping yarn.', `Run \`${chalk.yellow(formatCommands(toRun))}\` manually`);
                     return callback();
                 }
                 toRun.forEach(command => {
                     commandRunner.run(command, err => {
                         if (err) {
-                            log(err.message, `, run \`${gutil.colors.yellow(formatCommand(command))}\` manually`);
+                            log(err.message, `, run \`${chalk.yellow(formatCommand(command))}\` manually`);
                             return callback(err);
                         }
                         done(callback, toRun.length);
@@ -60,7 +61,7 @@ export default opts => {
                             if (key === 'args') {
                                 continue;
                             }
-                            log('Warning!.', `Command \`${gutil.colors.yellow(key)}\` not supported by gulp-yarn.`);
+                            log('Warning!.', `Command \`${chalk.yellow(key)}\` not supported by gulp-yarn.`);
                             return callback(new Error('Command not supported.'));
                         }
                     }
@@ -94,7 +95,7 @@ function log() {
     if (isTest()) {
         return;
     }
-    gutil.log(...[].slice.call(arguments));
+    logger.info(...[].slice.call(arguments));
 }
 
 /**
@@ -153,7 +154,7 @@ function skipInstall() {
 }
 
 /**
- * is Test environment
+ * Is Test environment
  * @returns {boolean}
  */
 function isTest() {
@@ -161,7 +162,7 @@ function isTest() {
 }
 
 /**
- * clone object
+ * Clone object
  * @param obj
  * @returns {*}
  */
