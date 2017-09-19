@@ -1,6 +1,6 @@
 {
     "name": "gulp-yarn",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Automatically install node modules using Yarn.",
     "main": "lib/index.js",
     "scripts": {
