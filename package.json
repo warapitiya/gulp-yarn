@@ -3,6 +3,7 @@
     "version": "1.0.1",
     "description": "Automatically install node modules using Yarn.",
     "main": "lib/index.js",
+    "typings": "index.d.ts",
     "scripts": {
         "test": "npm run build && NODE_ENV=test istanbul cover _mocha -R test/**/*.js -- --compilers js:babel-register",
         "lint": "xo src/**/*.js",
