@@ -48,7 +48,7 @@ declare module 'gulp-yarn' {
         args?: string | string[];
     }
 
-    const gulp_yarn: (options?: IGulpYarnOptions) => NodeJS.ReadStream;
+    const gulpYarn: (options?: IGulpYarnOptions) => NodeJS.ReadStream;
 
-    export = gulp_yarn;
+    export = gulpYarn;
   }
