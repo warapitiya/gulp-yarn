@@ -2,18 +2,19 @@
  * Created by mwarapitiya on 10/23/16.
  */
 
-var path = require('path');
-var childProcess = require('child_process');
-var through = require('through2');
-var gutil = require('gulp-util');
-var which = require('which');
-var yarnArgs = require('./utils/commands');
-var PluginError = gutil.PluginError;
+const path = require('path');
+const childProcess = require('child_process');
+const through = require('through2');
+const gutil = require('gulp-util');
+const which = require('which');
+const async = require('async');
+const yarnArgs = require('./utils/commands');
+const PluginError = gutil.PluginError;
 
 // Consts
-var PLUGIN_NAME = 'gulpYarn';
+const PLUGIN_NAME = 'gulpYarn';
 
-var commandList = {
+const commandList = {
     'package.json': {
         cmd: 'yarn',
         args: []
@@ -22,33 +23,46 @@ var commandList = {
 
 // Plugin level function(dealing with files)
 function gulpYarn(gulpYarnOptions) {
-    var toRun = [];
-    var count = 0;
+    const toRun = [];
+    let count = 0;
 
     // Creating a stream through which each file will pass
-    return through.obj((file, enc, cb) => {
+    return through.obj((file, enc, callback) => {
         if (file === undefined || file.isNull()) {
             // return empty file
-            return cb(null, file);
+            return callback(null, file);
         }
 
-        var command = clone(commandList[path.basename(file.path)]);
+        // flush function
+        const flush = (err, file) => {
+            if (err) {
+                return callback(err);
+            }
+            return callback(null, file);
+        };
+
+        const command = clone(commandList[path.basename(file.path)]);
 
         if (command) {
             if (gulpYarnOptions) {
+                let error = undefined;
                 command.args = Object.keys(gulpYarnOptions)
                     .map((key) => {
                         if (yarnArgs.hasOwnProperty(key) && gulpYarnOptions[key] === true) {
                             return yarnArgs[key];
                         } else {
                             if (key !== 'args') {
-                                cb(new PluginError(PLUGIN_NAME, `Command '${key}' not supported.`));
+                                error = new PluginError(PLUGIN_NAME, `Command '${key}' not supported.`);
                             }
                         }
                     })
                     .filter((item) => item !== undefined || item === null);
+
+                if (error) {
+                    return flush(error);
+                }
             }
-            if (gulpYarnOptions && gulpYarnOptions.has) {
+            if (gulpYarnOptions && gulpYarnOptions.args) {
                 command.args = flatten(command.args.concat(formatArguments(gulpYarnOptions.args)));
             }
             command.cwd = path.dirname(file.path);
@@ -56,30 +70,34 @@ function gulpYarn(gulpYarnOptions) {
         }
 
         if (!toRun.length) {
-            cb(new PluginError(PLUGIN_NAME, `No commands found to run.`));
+            callback(new PluginError(PLUGIN_NAME, `No commands found to run.`));
         }
 
-        toRun.map((singleCommand) => {
+        return async.mapSeries(toRun, (singleCommand, next) => {
             which(singleCommand.cmd, (err, cmdpath) => {
                 if (err) {
-                    cb(new PluginError(PLUGIN_NAME, `Error while determining the folder path.`));
-                    return;
+                    next(new PluginError(PLUGIN_NAME, `Error while determining the folder path.`));
                 }
-                var cmd = childProcess.spawn(cmdpath, singleCommand.args, {
+                const cmd = childProcess.spawn(cmdpath, singleCommand.args, {
                     stdio: 'inherit',
                     cwd: singleCommand.cwd || process.cwd()
                 });
-                cmd.on('close', code => {
+                cmd.once('close', (code) => {
                     if (code !== 0) {
-                        cb(new PluginError(PLUGIN_NAME, `${command.cmd} exited with non-zero code ${code}.`));
-                    }
-
-                    // If all commands are finished
-                    if (++count === toRun.length) {
-                        cb(null, file);
+                        next(new PluginError(PLUGIN_NAME, `${command.cmd} exited with non-zero code ${code}.`));
+                    } else {
+                        // If all commands are finished
+                        if (toRun.length === ++count) {
+                            next(false, file);
+                        }
                     }
                 });
             });
+        }, (err, file) => {
+            if (err) {
+                flush(err);
+            }
+            flush(null, file[0]);
         });
     });
 }
@@ -93,7 +111,7 @@ function clone(obj) {
     if (Array.isArray(obj)) {
         return obj.map(clone);
     } else if (typeof obj === 'object') {
-        var copy = {};
+        const copy = {};
         Object.keys(obj).forEach(key => {
             copy[key] = clone(obj[key]);
         });
@@ -134,7 +152,7 @@ function formatArguments(args) {
  * @returns {*}
  */
 function formatArgument(arg) {
-    var result = arg;
+    let result = arg;
     while (!result.match(/--.*/)) {
         result = `-${result}`;
     }

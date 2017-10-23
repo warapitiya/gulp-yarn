@@ -1,3 +1,12 @@
+<a name="2.0.0-beta.1"></a>
+# 2.0.0-beta.1 (2017-10-20)
+
+* ✨ Adding typings ([9b93268](https://github.com/warapitiya/gulp-yarn/commit/9b93268))
+* v2.0.0-beta.1 ([afd4a0a](https://github.com/warapitiya/gulp-yarn/commit/afd4a0a))
+* feat(core): simplified the code base and fix bugs ([dd74514](https://github.com/warapitiya/gulp-yarn/commit/dd74514))
+
+
+
 <a name="1.0.1"></a>
 ## 1.0.1 (2017-09-19)
 
@@ -15,9 +24,9 @@
 * adjust documentation -> Adding yarn non-interaction command to avoid the resolution of versions (whe ([2127eb1](https://github.com/warapitiya/gulp-yarn/commit/2127eb1))
 * v1.0.0 ([f1f452f](https://github.com/warapitiya/gulp-yarn/commit/f1f452f))
 * chore(Changelog): Add changelog support locally ([70d02dc](https://github.com/warapitiya/gulp-yarn/commit/70d02dc))
-* chore(Readme): change to packages and readme.md files ([38e65ae](https://github.com/warapitiya/gulp-yarn/commit/38e65ae))
 * chore(package): update xo to version 0.18.0 ([9df4bd6](https://github.com/warapitiya/gulp-yarn/commit/9df4bd6))
 * chore(package): update xo to version 0.19.0 ([559c7b3](https://github.com/warapitiya/gulp-yarn/commit/559c7b3))
+* chore(Readme): change to packages and readme.md files ([38e65ae](https://github.com/warapitiya/gulp-yarn/commit/38e65ae))
 * docs: add updated changelog ([acd499b](https://github.com/warapitiya/gulp-yarn/commit/acd499b))
 
 
@@ -65,15 +74,15 @@
 # 0.1.0 (2017-02-07)
 
 * 0.1.0 ([9193072](https://github.com/warapitiya/gulp-yarn/commit/9193072))
-* README.md typo ([14b66b1](https://github.com/warapitiya/gulp-yarn/commit/14b66b1))
-* Set theme jekyll-theme-cayman ([43e8158](https://github.com/warapitiya/gulp-yarn/commit/43e8158))
-* Set theme jekyll-theme-modernist ([959b346](https://github.com/warapitiya/gulp-yarn/commit/959b346))
-* Update README.md ([4636038](https://github.com/warapitiya/gulp-yarn/commit/4636038))
 * add code coverage, add support to noProgress, noLockfile ([f778e54](https://github.com/warapitiya/gulp-yarn/commit/f778e54))
 * add test script ([dfd97ca](https://github.com/warapitiya/gulp-yarn/commit/dfd97ca))
 * changes to README ([103d5d6](https://github.com/warapitiya/gulp-yarn/commit/103d5d6))
 * fix coveralls.io ([5f79f3e](https://github.com/warapitiya/gulp-yarn/commit/5f79f3e))
+* README.md typo ([14b66b1](https://github.com/warapitiya/gulp-yarn/commit/14b66b1))
+* Set theme jekyll-theme-cayman ([43e8158](https://github.com/warapitiya/gulp-yarn/commit/43e8158))
+* Set theme jekyll-theme-modernist ([959b346](https://github.com/warapitiya/gulp-yarn/commit/959b346))
 * update readme.md ([8fcef77](https://github.com/warapitiya/gulp-yarn/commit/8fcef77))
+* Update README.md ([4636038](https://github.com/warapitiya/gulp-yarn/commit/4636038))
 
 
 
@@ -97,9 +106,9 @@
 ## 0.0.2 (2016-10-23)
 
 * 0.0.2 ([213d8bf](https://github.com/warapitiya/gulp-yarn/commit/213d8bf))
-* Initial commit ([e6eb7a5](https://github.com/warapitiya/gulp-yarn/commit/e6eb7a5))
 * add 'force', 'flat', 'dev' arguments support ([736c23d](https://github.com/warapitiya/gulp-yarn/commit/736c23d))
 * init gulp-yarn repo ([91fc94a](https://github.com/warapitiya/gulp-yarn/commit/91fc94a))
+* Initial commit ([e6eb7a5](https://github.com/warapitiya/gulp-yarn/commit/e6eb7a5))
 
 
 
