@@ -7,7 +7,7 @@ const childProcess = require('child_process');
 const through = require('through2');
 const gutil = require('gulp-util');
 const which = require('which');
-const async = require('async');
+const mapSeries = require('async/mapSeries');
 const yarnArgs = require('./utils/commands');
 const PluginError = gutil.PluginError;
 
@@ -73,7 +73,7 @@ function gulpYarn(gulpYarnOptions) {
             callback(new PluginError(PLUGIN_NAME, `No commands found to run.`));
         }
 
-        return async.mapSeries(toRun, (singleCommand, next) => {
+        return mapSeries(toRun, (singleCommand, next) => {
             which(singleCommand.cmd, (err, cmdpath) => {
                 if (err) {
                     next(new PluginError(PLUGIN_NAME, `Error while determining the folder path.`));
