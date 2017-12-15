@@ -45,3 +45,7 @@ jspm_packages
 
 /.idea
 /lib/
+build/
+
+# OS
+.DS_Store
