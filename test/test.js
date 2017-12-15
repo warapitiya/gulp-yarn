@@ -79,6 +79,38 @@ describe('gulpYarn', function () {
         gulpYarnObject.write(fakeFile);
     });
 
+    it('should not call two times', function (done) {
+        // create the fake file
+        var fakeFile = new File({
+            base: "package",
+            path: "test/package.json",
+            contents: new Buffer(JSON.stringify(pkg))
+        });
+
+        var fakeJSFile = new File({
+            base: "package",
+            path: "test/package.js",
+            contents: new Buffer(JSON.stringify(pkg))
+        });
+
+        // Create a gulpYarn plugin stream
+        var gulpYarnObject = gulpYarn({
+            production: true
+        });
+
+        gulpYarnObject.once('data', function (file) {
+            should.exist(file.isBuffer());
+
+            // check child process calls
+            expect(sandbox.calls.length).to.be.equal(1);
+            done();
+        });
+
+        // write the fake file to it
+        gulpYarnObject.write(fakeJSFile);
+        gulpYarnObject.write(fakeFile);
+    });
+
     it('should run without any arg', function (done) {
         // create the fake file
         var fakeFile = new File({
