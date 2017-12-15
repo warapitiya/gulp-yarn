@@ -80,10 +80,12 @@ function gulpYarn(gulpYarnOptions) {
                 if (err) {
                     next(new PluginError(PLUGIN_NAME, `Error while determining the folder path.`));
                 }
-                var cmd = childProcess.spawn(cmdpath, singleCommand.args, {
+                var installOptions = {
                     stdio: 'inherit',
+                    shell: true,
                     cwd: singleCommand.cwd || process.cwd()
-                });
+                };
+                var cmd = childProcess.spawn(cmdpath, singleCommand.args, installOptions);
                 cmd.once('close', function (code) {
                     if (code !== 0) {
                         next(new PluginError(PLUGIN_NAME, `${command.cmd} exited with non-zero code ${code}.`));
