@@ -18,6 +18,8 @@
 * fix(core): fix issues with async behavior ([4849558](https://github.com/warapitiya/gulp-yarn/commit/4849558))
 * ✨ Adding typings ([9b93268](https://github.com/warapitiya/gulp-yarn/commit/9b93268))
 * v2.0.0-beta.1 ([afd4a0a](https://github.com/warapitiya/gulp-yarn/commit/afd4a0a))
+* chore(package): update coveralls to version 3.0.0 ([7907a4c](https://github.com/warapitiya/gulp-yarn/commit/7907a4c))
+* chore(package): update mocha to version 4.0.0 ([4dd11f3](https://github.com/warapitiya/gulp-yarn/commit/4dd11f3))
 
 
 
