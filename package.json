@@ -1,6 +1,6 @@
 {
     "name": "gulp-yarn",
-    "version": "2.0.0-beta.1",
+    "version": "2.0.0-beta.2",
     "description": "Automatically install node modules using Yarn.",
     "main": "index.js",
     "typings": "index.d.ts",
