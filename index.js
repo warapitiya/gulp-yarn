@@ -42,10 +42,8 @@ function gulpYarn(gulpYarnOptions) {
             }
             return callback(null, file);
         };
-
         var command = clone(commandList[path.basename(file.path)]);
-
-        if (command) {
+        if (command !== undefined) {
             if (gulpYarnOptions) {
                 var error = undefined;
                 command.args = Object.keys(gulpYarnOptions).map(function (key) {
@@ -69,40 +67,42 @@ function gulpYarn(gulpYarnOptions) {
             }
             command.cwd = path.dirname(file.path);
             toRun.push(command);
-        }
 
-        if (!toRun.length) {
-            callback(new PluginError(PLUGIN_NAME, `No commands found to run.`));
-        }
-
-        return mapSeries(toRun, function (singleCommand, next) {
-            which(singleCommand.cmd, function (err, cmdpath) {
-                if (err) {
-                    next(new PluginError(PLUGIN_NAME, `Error while determining the folder path.`));
-                }
-                var installOptions = {
-                    stdio: 'inherit',
-                    shell: true,
-                    cwd: singleCommand.cwd || process.cwd()
-                };
-                var cmd = childProcess.spawn(cmdpath, singleCommand.args, installOptions);
-                cmd.once('close', function (code) {
-                    if (code !== 0) {
-                        next(new PluginError(PLUGIN_NAME, `${command.cmd} exited with non-zero code ${code}.`));
-                    } else {
-                        // If all commands are finished
-                        if (toRun.length === ++count) {
-                            next(false, file);
-                        }
-                    }
-                });
-            });
-        }, function (err, file) {
-            if (err) {
-                flush(err);
+            if (!toRun.length) {
+                callback(new PluginError(PLUGIN_NAME, `No commands found to run.`));
             }
-            flush(null, file[0]);
-        });
+
+            return mapSeries(toRun, function (singleCommand, next) {
+                which(singleCommand.cmd, function (err, cmdpath) {
+                    if (err) {
+                        next(new PluginError(PLUGIN_NAME, `Error while determining the folder path.`));
+                    }
+                    var installOptions = {
+                        stdio: 'inherit',
+                        shell: true,
+                        cwd: singleCommand.cwd || process.cwd()
+                    };
+                    var cmd = childProcess.spawn(cmdpath, singleCommand.args, installOptions);
+                    cmd.once('close', function (code) {
+                        if (code !== 0) {
+                            next(new PluginError(PLUGIN_NAME, `${command.cmd} exited with non-zero code ${code}.`));
+                        } else {
+                            // If all commands are finished
+                            if (toRun.length === ++count) {
+                                next(false, file);
+                            }
+                        }
+                    });
+                });
+            }, function (err, file) {
+                if (err) {
+                    flush(err);
+                }
+                flush(null, file[0]);
+            });
+        } else {
+            callback();
+        }
     });
 }
 
