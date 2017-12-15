@@ -1,3 +1,13 @@
+<a name="2.0.0-beta.2"></a>
+# 2.0.0-beta.2 (2017-12-15)
+
+* v2.0.0-beta.2 ([b44c493](https://github.com/warapitiya/gulp-yarn/commit/b44c493))
+* chore(dependency): update dependency ([2a5dec0](https://github.com/warapitiya/gulp-yarn/commit/2a5dec0))
+* fix(core): add shell option to spawn function ([4ef7686](https://github.com/warapitiya/gulp-yarn/commit/4ef7686))
+* docs(chaneglog): update changelog ([345b4b4](https://github.com/warapitiya/gulp-yarn/commit/345b4b4))
+
+
+
 <a name="2.0.0-beta.1"></a>
 # 2.0.0-beta.1 (2017-10-23)
 
