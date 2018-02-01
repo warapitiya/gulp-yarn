@@ -82,7 +82,7 @@ function gulpYarn(gulpYarnOptions) {
                         shell: true,
                         cwd: singleCommand.cwd || process.cwd()
                     };
-                    var cmd = childProcess.spawn(cmdpath, singleCommand.args, installOptions);
+                    var cmd = childProcess.spawn(`"${cmdpath}"`, singleCommand.args, installOptions);
                     cmd.once('close', function (code) {
                         if (code !== 0) {
                             next(new PluginError(PLUGIN_NAME, `${command.cmd} exited with non-zero code ${code}.`));
