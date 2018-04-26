@@ -7,11 +7,10 @@
 var path = require('path');
 var childProcess = require('child_process');
 var through = require('through2');
-var gutil = require('gulp-util');
 var which = require('which');
 var mapSeries = require('async/mapSeries');
 var yarnArgs = require('./utils/commands');
-var PluginError = gutil.PluginError;
+var PluginError = require('plugin-error');
 
 // Consts
 var PLUGIN_NAME = 'gulpYarn';
