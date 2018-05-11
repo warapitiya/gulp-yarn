@@ -1,3 +1,18 @@
+<a name="2.0.0"></a>
+# 2.0.0 (2018-05-11)
+
+* Replace deprecated gulp-util with plugin-error ([6052f9d](https://github.com/warapitiya/gulp-yarn/commit/6052f9d))
+* v2.0.0 ([8b58f14](https://github.com/warapitiya/gulp-yarn/commit/8b58f14))
+* v2.0.0-beta.3 ([c93a597](https://github.com/warapitiya/gulp-yarn/commit/c93a597))
+* chore(package): update mocha to version 5.0.0 ([8a78eba](https://github.com/warapitiya/gulp-yarn/commit/8a78eba))
+* chore(package): update xo to version 0.20.0 ([ea1a17d](https://github.com/warapitiya/gulp-yarn/commit/ea1a17d))
+* fix(core): Allow Windows paths containing a white-space ([8e1d221](https://github.com/warapitiya/gulp-yarn/commit/8e1d221))
+* fix(core): fix calling yarn install for each file. only works for package.json files ([c7227bf](https://github.com/warapitiya/gulp-yarn/commit/c7227bf))
+* docs(changelog): update changelog ([38f1901](https://github.com/warapitiya/gulp-yarn/commit/38f1901))
+* docs(changelog): update changelog ([015c4c0](https://github.com/warapitiya/gulp-yarn/commit/015c4c0))
+
+
+
 <a name="2.0.0-beta.2"></a>
 # 2.0.0-beta.2 (2017-12-15)
 
