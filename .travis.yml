@@ -5,4 +5,5 @@ node_js:
   - '6'
   - '7'
   - '8'
+  - '10'
 after_script: NODE_ENV=test istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/test.js && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
