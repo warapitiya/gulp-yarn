@@ -72,6 +72,7 @@ describe('gulpYarn', function () {
 
             // check child process calls
             expect(sandbox.calls.length).to.be.equal(1);
+            expect(sandbox.calls[0].args).to.eql([ '--production' ]);
             done();
         });
 
@@ -127,6 +128,7 @@ describe('gulpYarn', function () {
 
             // check child process calls
             expect(sandbox.calls.length).to.be.equal(1);
+            expect(sandbox.calls[0].args).to.eql([]);
             done();
         });
 
@@ -177,6 +179,7 @@ describe('gulpYarn', function () {
 
             // check child process calls
             expect(sandbox.calls.length).to.be.equal(1);
+            expect(sandbox.calls[0].args).to.eql(['--production', '--no-bin-links']);
             done();
         });
 
@@ -204,6 +207,64 @@ describe('gulpYarn', function () {
 
             // check child process calls
             expect(sandbox.calls.length).to.be.equal(1);
+            expect(sandbox.calls[0].args).to.eql([ '--production --no-bin-links' ]);
+            done();
+        });
+
+        // write the fake file to it
+        gulpYarnObject.write(fakeFile);
+    });
+
+    it(`should run with yarn command`, function(done) {
+        // create the fake file
+        var fakeFile = new File({
+            base: "package",
+            path: "test/package.json",
+            contents: new Buffer(JSON.stringify(pkg))
+        });
+
+        // Create a gulpYarn plugin stream
+        var gulpYarnObject = gulpYarn({
+            cmd: 'check'
+        });
+
+        // wait for the file to come back out
+        gulpYarnObject.once('data', function (file) {
+            // make sure it came out the same way it went in
+            should.exist(file.isBuffer());
+
+            // check child process calls
+            expect(sandbox.calls.length).to.be.equal(1);
+            expect(sandbox.calls[0].args).to.eql([ 'check' ]);
+            done();
+        });
+
+        // write the fake file to it
+        gulpYarnObject.write(fakeFile);
+    });
+
+    it(`should run with yarn command and args`, function(done) {
+        // create the fake file
+        var fakeFile = new File({
+            base: "package",
+            path: "test/package.json",
+            contents: new Buffer(JSON.stringify(pkg))
+        });
+
+        // Create a gulpYarn plugin stream
+        var gulpYarnObject = gulpYarn({
+            cmd: 'check',
+            args: [ '--production', '--no-bin-links' ]
+        });
+
+        // wait for the file to come back out
+        gulpYarnObject.once('data', function (file) {
+            // make sure it came out the same way it went in
+            should.exist(file.isBuffer());
+
+            // check child process calls
+            expect(sandbox.calls.length).to.be.equal(1);
+            expect(sandbox.calls[0].args).to.eql([ 'check', '--production', '--no-bin-links' ]);
             done();
         });
 

@@ -18,6 +18,7 @@ var PLUGIN_NAME = 'gulpYarn';
 var commandList = {
     'package.json': {
         cmd: 'yarn',
+        yarncommand: '',
         args: []
     }
 };
@@ -49,7 +50,7 @@ function gulpYarn(gulpYarnOptions) {
                     if (yarnArgs.hasOwnProperty(key) && gulpYarnOptions[key] === true) {
                         return yarnArgs[key];
                     } else {
-                        if (key !== 'args') {
+                        if (key !== 'args' && key !== 'cmd') {
                             error = new PluginError(PLUGIN_NAME, `Command '${key}' not supported.`);
                         }
                     }
@@ -61,8 +62,13 @@ function gulpYarn(gulpYarnOptions) {
                     return flush(error);
                 }
             }
-            if (gulpYarnOptions && gulpYarnOptions.args) {
-                command.args = flatten(command.args.concat(formatArguments(gulpYarnOptions.args)));
+            if (gulpYarnOptions) {
+                if (gulpYarnOptions.args) {
+                    command.args = flatten(command.args.concat(formatArguments(gulpYarnOptions.args)));
+                }
+                if (gulpYarnOptions.cmd) {
+                    command.yarncommand = gulpYarnOptions.cmd;
+                }
             }
             command.cwd = path.dirname(file.path);
             toRun.push(command);
@@ -81,7 +87,14 @@ function gulpYarn(gulpYarnOptions) {
                         shell: true,
                         cwd: singleCommand.cwd || process.cwd()
                     };
-                    var cmd = childProcess.spawn(`"${cmdpath}"`, singleCommand.args, installOptions);
+                    var commandArgs = [];
+                    if (singleCommand.yarncommand) {
+                        commandArgs.push(singleCommand.yarncommand);
+                    }
+                    if (singleCommand.args && singleCommand.args.length) {
+                        commandArgs = commandArgs.concat(singleCommand.args);
+                    }
+                    var cmd = childProcess.spawn(`"${cmdpath}"`, commandArgs, installOptions);
                     cmd.once('close', function (code) {
                         if (code !== 0) {
                             next(new PluginError(PLUGIN_NAME, `${command.cmd} exited with non-zero code ${code}.`));

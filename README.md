@@ -74,6 +74,7 @@ gulp.task('yarn', function() {
 | ignoreScripts | Don't run npm scripts during installation                                                                                                                              | Boolean |
 | nonInteractive| Using the '--non-interactive' flag of yarn to avoid that during the resolution (yarn install) a user input is needed. [2770](https://github.com/yarnpkg/yarn/pull/2770)| Boolean | 
 | args          | Pass any argument with `--` to execute with yarn                                                                                                                       | String/Array |
+| cmd           | Yarn command to run (e.g. check, add)                                                                                                                                  | String |
 
 ## Test
 ```sh
