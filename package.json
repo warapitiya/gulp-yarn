@@ -1,71 +1,65 @@
 {
-    "name": "gulp-yarn",
-    "version": "2.0.0",
-    "description": "Automatically install node modules using Yarn.",
-    "main": "index.js",
-    "typings": "index.d.ts",
-    "scripts": {
-        "test": "istanbul cover _mocha -- test/test.js -R spec",
-        "lint": "xo src/**/*.js",
-        "lint:fix": "xo src/**/*.js --fix",
-        "changelog": "conventional-changelog -i CHANGELOG.md -s -r 0",
-        "commit": "git-cz"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/warapitiya/gulp-yarn.git"
-    },
-    "keywords": [
-        "gulpplugin",
-        "yarn",
-        "yarnpkg",
-        "gulp",
-        "install"
+  "name": "gulp-yarn",
+  "version": "2.0.0",
+  "description": "Automatically install node modules using Yarn.",
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "scripts": {
+    "test": "istanbul cover _mocha -- test/test.js -R spec",
+    "lint": "xo src/**/*.js",
+    "lint:fix": "xo src/**/*.js --fix",
+    "release": "standard-version",
+    "commit": "npx git-cz --disable-emoji"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/warapitiya/gulp-yarn.git"
+  },
+  "keywords": [
+    "gulpplugin",
+    "yarn",
+    "yarnpkg",
+    "gulp",
+    "install"
+  ],
+  "author": "Malindu Warapitiya <warapitiya93@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/warapitiya/gulp-yarn/issues"
+  },
+  "homepage": "https://github.com/warapitiya/gulp-yarn",
+  "dependencies": {
+    "async": "^2.5.0",
+    "plugin-error": "^1.0.1",
+    "through2": "^2.0.3",
+    "which": "^1.3.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
+    "istanbul": "1.1.0-alpha.1",
+    "mocha": "^5.0.0",
+    "mock-spawn": "^0.2.6",
+    "prettier": "^2.1.2",
+    "standard-version": "^9.0.0",
+    "vinyl": "^2.1.0",
+    "xo": "^0.20.0"
+  },
+  "xo": {
+    "envs": [
+      "node"
     ],
-    "author": "Malindu Warapitiya <warapitiya93@gmail.com>",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/warapitiya/gulp-yarn/issues"
-    },
-    "homepage": "https://github.com/warapitiya/gulp-yarn",
-    "dependencies": {
-        "async": "^2.5.0",
-        "plugin-error": "^1.0.1",
-        "through2": "^2.0.3",
-        "which": "^1.3.0"
-    },
-    "devDependencies": {
-        "chai": "^4.1.2",
-        "commitizen": "^2.9.6",
-        "conventional-changelog-cli": "^1.3.4",
-        "coveralls": "^3.0.0",
-        "cz-conventional-changelog": "^2.0.0",
-        "istanbul": "1.1.0-alpha.1",
-        "mocha": "^5.0.0",
-        "mock-spawn": "^0.2.6",
-        "vinyl": "^2.1.0",
-        "xo": "^0.20.0"
-    },
-    "xo": {
-        "envs": [
-            "node"
-        ],
-        "globals": [],
-        "rules": {
-            "unicorn/filename-case": [
-                "error",
-                {
-                    "case": "camelCase"
-                }
-            ]
+    "globals": [],
+    "rules": {
+      "unicorn/filename-case": [
+        "error",
+        {
+          "case": "camelCase"
         }
-    },
-    "directories": {
-        "test": "test"
-    },
-    "config": {
-        "commitizen": {
-            "path": "./node_modules/cz-conventional-changelog"
-        }
+      ]
     }
+  },
+  "directories": {
+    "test": "test"
+  }
 }
