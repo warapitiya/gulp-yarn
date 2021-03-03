@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Created by Malindu Warapitiya on 2/7/17.
  */

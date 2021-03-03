@@ -5,12 +5,9 @@
  */
 
 var childProcess = require('child_process');
-var chai = require('chai');
 var File = require('vinyl');
 var mockSpawn = require('mock-spawn');
 var gulpYarn = require('../index');
-var expect = chai.expect;
-var should = chai.should();
 var pkg = require('./package.json');
 var sandbox = void 0;
 
@@ -32,7 +29,7 @@ describe('gulpYarn', function () {
     var fakeFile = new File({
       base: 'package',
       path: 'test/package.json',
-      contents: new Buffer(JSON.stringify(pkg)),
+      contents: new Buffer.from(JSON.stringify(pkg)),
     });
 
     // Create a gulpYarn plugin stream
@@ -42,12 +39,10 @@ describe('gulpYarn', function () {
 
     gulpYarnObject.once('error', function (error) {
       // check child process calls
-      expect(sandbox.calls.length).to.be.equal(0);
+      expect(sandbox.calls.length).toEqual(0);
 
       // check error message
-      expect(error)
-        .to.exist.and.be.instanceof(Error)
-        .and.have.property('message', "Command 'npm' not supported.");
+      expect(error.message).toEqual("Command 'npm' not supported.");
       done();
     });
 
@@ -60,7 +55,7 @@ describe('gulpYarn', function () {
     var fakeFile = new File({
       base: 'package',
       path: 'test/package.json',
-      contents: new Buffer(JSON.stringify(pkg)),
+      contents: new Buffer.from(JSON.stringify(pkg)),
     });
 
     // Create a gulpYarn plugin stream
@@ -69,10 +64,10 @@ describe('gulpYarn', function () {
     });
 
     gulpYarnObject.once('data', function (file) {
-      should.exist(file.isBuffer());
+      expect(file.isBuffer()).toBeTruthy();
 
       // check child process calls
-      expect(sandbox.calls.length).to.be.equal(1);
+      expect(sandbox.calls.length).toEqual(1);
       done();
     });
 
@@ -85,13 +80,13 @@ describe('gulpYarn', function () {
     var fakeFile = new File({
       base: 'package',
       path: 'test/package.json',
-      contents: new Buffer(JSON.stringify(pkg)),
+      contents: new Buffer.from(JSON.stringify(pkg)),
     });
 
     var fakeJSFile = new File({
       base: 'package',
       path: 'test/package.js',
-      contents: new Buffer(JSON.stringify(pkg)),
+      contents: new Buffer.from(JSON.stringify(pkg)),
     });
 
     // Create a gulpYarn plugin stream
@@ -100,10 +95,10 @@ describe('gulpYarn', function () {
     });
 
     gulpYarnObject.once('data', function (file) {
-      should.exist(file.isBuffer());
+      expect(file.isBuffer()).toBeTruthy();
 
       // check child process calls
-      expect(sandbox.calls.length).to.be.equal(1);
+      expect(sandbox.calls.length).toEqual(1);
       done();
     });
 
@@ -117,17 +112,17 @@ describe('gulpYarn', function () {
     var fakeFile = new File({
       base: 'package',
       path: 'test/package.json',
-      contents: new Buffer(JSON.stringify(pkg)),
+      contents: new Buffer.from(JSON.stringify(pkg)),
     });
 
     // Create a gulpYarn plugin stream
     var gulpYarnObject = gulpYarn();
 
     gulpYarnObject.once('data', function (file) {
-      should.exist(file.isBuffer());
+      expect(file.isBuffer()).toBeTruthy();
 
       // check child process calls
-      expect(sandbox.calls.length).to.be.equal(1);
+      expect(sandbox.calls.length).toEqual(1);
       done();
     });
 
@@ -150,7 +145,7 @@ describe('gulpYarn', function () {
     // wait for the file to come back out
     gulpYarnObject.once('data', function (file) {
       // make sure it came out the same way it went in
-      should.exist(file.isBuffer());
+      expect(file.isBuffer()).toBeFalsy();
       done();
     });
 
@@ -163,7 +158,7 @@ describe('gulpYarn', function () {
     var fakeFile = new File({
       base: 'package',
       path: 'test/package.json',
-      contents: new Buffer(JSON.stringify(pkg)),
+      contents: new Buffer.from(JSON.stringify(pkg)),
     });
 
     // Create a gulpYarn plugin stream
@@ -174,10 +169,10 @@ describe('gulpYarn', function () {
     // wait for the file to come back out
     gulpYarnObject.once('data', function (file) {
       // make sure it came out the same way it went in
-      should.exist(file.isBuffer());
+      expect(file.isBuffer()).toBeTruthy();
 
       // check child process calls
-      expect(sandbox.calls.length).to.be.equal(1);
+      expect(sandbox.calls.length).toEqual(1);
       done();
     });
 
@@ -190,7 +185,7 @@ describe('gulpYarn', function () {
     var fakeFile = new File({
       base: 'package',
       path: 'test/package.json',
-      contents: new Buffer(JSON.stringify(pkg)),
+      contents: new Buffer.from(JSON.stringify(pkg)),
     });
 
     // Create a gulpYarn plugin stream
@@ -201,10 +196,10 @@ describe('gulpYarn', function () {
     // wait for the file to come back out
     gulpYarnObject.once('data', function (file) {
       // make sure it came out the same way it went in
-      should.exist(file.isBuffer());
+      expect(file.isBuffer()).toBeTruthy();
 
       // check child process calls
-      expect(sandbox.calls.length).to.be.equal(1);
+      expect(sandbox.calls.length).toEqual(1);
       done();
     });
 

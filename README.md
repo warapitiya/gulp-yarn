@@ -15,8 +15,7 @@ Because we <img alt="emoji=heart" src="https://github.com/warapitiya/assets/blob
   <a href='https://coveralls.io/github/warapitiya/gulp-yarn?branch=master'><img src='https://coveralls.io/repos/github/warapitiya/gulp-yarn/badge.svg?branch=master' alt='Coverage Status' /></a>
   <a href="https://www.npmjs.com/package/gulp-yarn"><img src="https://img.shields.io/npm/v/gulp-yarn.svg" alt="npm version"></a>
   <a href="https://www.npmjs.com/package/gulp-yarn"><img src="https://img.shields.io/npm/dt/gulp-yarn.svg" alt="npm downloads"></a>
-  <a href="https://github.com/sindresorhus/xo"><img src="https://img.shields.io/badge/code_style-XO-5ed9c7.svg" alt="xo"></a>
-  <a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/warapitiya/gulp-yarn.svg" alt="Greenkeeper badge"></a>
+  <a href="https://eslint.org"><img src="https://img.shields.io/badge/code%20style-eslint-blue" alt="eslint"></a>
 </p>
 
 ---
@@ -32,15 +31,16 @@ $ yarn add gulp-yarn -D
 ```
 
 ## Quick Start
+
 **BASIC:** Better performance when in same directory.
 
 ```javascript
 var gulp = require('gulp');
 var yarn = require('gulp-yarn');
 
-gulp.task('yarn', function() {
-    return gulp.src(['./package.json'])
-        .pipe(yarn());
+gulp.task('yarn', function () {
+  return gulp.src(['./package.json'])
+    .pipe(yarn());
 });
 
 ```
@@ -51,16 +51,17 @@ gulp.task('yarn', function() {
 var gulp = require('gulp');
 var yarn = require('gulp-yarn');
 
-gulp.task('yarn', function() {
-    return gulp.src(['./package.json', './yarn.lock'])
-        .pipe(gulp.dest('./dist'))
-        .pipe(yarn({
-            production: true
-        }));
+gulp.task('yarn', function () {
+  return gulp.src(['./package.json', './yarn.lock'])
+    .pipe(gulp.dest('./dist'))
+    .pipe(yarn({
+      production: true
+    }));
 });
 ```
 
 ## Options
+
 | Option        | Description                                                                                                                                                            | Type    |
 |---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
 | production    | Using the `--production` flag, or when the NODE_ENV environment variable is set to production, Yarn will not install any package listed in devDependencies.            | Boolean |
@@ -76,10 +77,12 @@ gulp.task('yarn', function() {
 | args          | Pass any argument with `--` to execute with yarn                                                                                                                       | String/Array |
 
 ## Test
+
 ```sh
 #run mocha test with istanbul
 yarn test
 ```
 
 ## Contribute
+
 Contributions are always welcome, no matter how large or small.
