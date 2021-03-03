@@ -6,7 +6,7 @@
   "typings": "index.d.ts",
   "scripts": {
     "commit": "npx git-cz --disable-emoji",
-    "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
+    "coveralls": "jest --coverage && cat coverage/lcov.info | coveralls",
     "release": "standard-version",
     "test": "jest"
   },
