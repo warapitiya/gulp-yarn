@@ -1,3 +1,20 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [3.0.0](https://github.com/warapitiya/gulp-yarn/compare/v2.0.0-beta.2...v3.0.0) (2021-03-03)
+
+
+### Features
+
+* support modern javascript ([edfb964](https://github.com/warapitiya/gulp-yarn/commit/edfb964cebf568337feb5fdcf1ae0ed085d7fd10))
+
+
+### Bug Fixes
+
+* **core:** Allow Windows paths containing a white-space ([8e1d221](https://github.com/warapitiya/gulp-yarn/commit/8e1d221f7624e6119f76848252644334d91ac89a))
+* **core:** fix calling yarn install for each file. only works for package.json files ([c7227bf](https://github.com/warapitiya/gulp-yarn/commit/c7227bfe4a49015d9c410ad130474f406f41b960))
+
 <a name="2.0.0"></a>
 # 2.0.0 (2018-05-11)
 
@@ -140,6 +157,3 @@
 * add 'force', 'flat', 'dev' arguments support ([736c23d](https://github.com/warapitiya/gulp-yarn/commit/736c23d))
 * init gulp-yarn repo ([91fc94a](https://github.com/warapitiya/gulp-yarn/commit/91fc94a))
 * Initial commit ([e6eb7a5](https://github.com/warapitiya/gulp-yarn/commit/e6eb7a5))
-
-
-
