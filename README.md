@@ -22,6 +22,8 @@ Because we <img alt="emoji=heart" src="https://github.com/warapitiya/assets/blob
 
 ## Installation
 
+**SUPPORT:** v3 only support Nodejs `>= v10`.
+
 ```bash
 # npm
 $ npm install gulp-yarn --save-dev
@@ -79,7 +81,7 @@ gulp.task('yarn', function () {
 ## Test
 
 ```sh
-#run mocha test with istanbul
+#run jest test
 yarn test
 ```
 
