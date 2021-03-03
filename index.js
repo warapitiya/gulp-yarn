@@ -1,154 +1,36 @@
-'use strict';
-
 /**
- * Created by mwarapitiya on 10/23/16.
+ * Created by Malindu Warapitiya on 10/23/16.
  */
 
-var path = require('path');
-var childProcess = require('child_process');
-var through = require('through2');
-var which = require('which');
-var mapSeries = require('async/mapSeries');
-var yarnArgs = require('./utils/commands');
-var PluginError = require('plugin-error');
+const path = require('path');
+const childProcess = require('child_process');
+const through = require('through2');
+const which = require('which');
+const mapSeries = require('async/mapSeries');
+const PluginError = require('plugin-error');
+const clone = require('clone');
+const yarnArgs = require('./utils/commands');
 
-// Consts
-var PLUGIN_NAME = 'gulpYarn';
+// Constants
+const PLUGIN_NAME = 'gulpYarn';
 
-var commandList = {
-    'package.json': {
-        cmd: 'yarn',
-        args: []
-    }
+const commandList = {
+  'package.json': {
+    cmd: 'yarn',
+    args: [],
+  },
 };
-
-// Plugin level function(dealing with files)
-function gulpYarn(gulpYarnOptions) {
-    var toRun = [];
-    var count = 0;
-
-    // Creating a stream through which each file will pass
-    return through.obj(function (file, enc, callback) {
-        if (file === undefined || file.isNull()) {
-            // return empty file
-            return callback(null, file);
-        }
-
-        // flush function
-        var flush = function flush(err, file) {
-            if (err) {
-                return callback(err);
-            }
-            return callback(null, file);
-        };
-        var command = clone(commandList[path.basename(file.path)]);
-        if (command !== undefined) {
-            if (gulpYarnOptions) {
-                var error = undefined;
-                command.args = Object.keys(gulpYarnOptions).map(function (key) {
-                    if (yarnArgs.hasOwnProperty(key) && gulpYarnOptions[key] === true) {
-                        return yarnArgs[key];
-                    } else {
-                        if (key !== 'args') {
-                            error = new PluginError(PLUGIN_NAME, `Command '${key}' not supported.`);
-                        }
-                    }
-                }).filter(function (item) {
-                    return item !== undefined || item === null;
-                });
-
-                if (error) {
-                    return flush(error);
-                }
-            }
-            if (gulpYarnOptions && gulpYarnOptions.args) {
-                command.args = flatten(command.args.concat(formatArguments(gulpYarnOptions.args)));
-            }
-            command.cwd = path.dirname(file.path);
-            toRun.push(command);
-
-            if (!toRun.length) {
-                callback(new PluginError(PLUGIN_NAME, `No commands found to run.`));
-            }
-
-            return mapSeries(toRun, function (singleCommand, next) {
-                which(singleCommand.cmd, function (err, cmdpath) {
-                    if (err) {
-                        next(new PluginError(PLUGIN_NAME, `Error while determining the folder path.`));
-                    }
-                    var installOptions = {
-                        stdio: 'inherit',
-                        shell: true,
-                        cwd: singleCommand.cwd || process.cwd()
-                    };
-                    var cmd = childProcess.spawn(`"${cmdpath}"`, singleCommand.args, installOptions);
-                    cmd.once('close', function (code) {
-                        if (code !== 0) {
-                            next(new PluginError(PLUGIN_NAME, `${command.cmd} exited with non-zero code ${code}.`));
-                        } else {
-                            // If all commands are finished
-                            if (toRun.length === ++count) {
-                                next(false, file);
-                            }
-                        }
-                    });
-                });
-            }, function (err, file) {
-                if (err) {
-                    flush(err);
-                }
-                flush(null, file[0]);
-            });
-        } else {
-            callback();
-        }
-    });
-}
-
-/**
- * Clone object
- * @param obj
- * @returns {*}
- */
-function clone(obj) {
-    if (Array.isArray(obj)) {
-        return obj.map(clone);
-    } else if (typeof obj === 'object') {
-        var copy = {};
-        Object.keys(obj).forEach(function (key) {
-            copy[key] = clone(obj[key]);
-        });
-        return copy;
-    }
-    return obj;
-}
 
 /**
  * Flatten deep arrays
- * @param arr
  * @returns {*}
+ * @param array
  */
-function flatten(arr) {
-    return arr.reduce(function (flat, toFlatten) {
-        return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
-    }, []);
-}
-
-/**
- * Formant Arguments
- * @param args
- * @returns {*}
- */
-function formatArguments(args) {
-    if (Array.isArray(args)) {
-        return args.map(function (item) {
-            return formatArgument(item);
-        });
-    } else if (typeof args === 'string' || args instanceof String) {
-        return [formatArgument(args)];
-    }
-    console.error(`${PLUGIN_NAME} : Arguments are not passed in a valid format: ${args}`);
-    return [];
+function flatten(array) {
+  return array.reduce(
+    (flat, toFlatten) => flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten),
+    []
+  );
 }
 
 /**
@@ -157,11 +39,119 @@ function formatArguments(args) {
  * @returns {*}
  */
 function formatArgument(arg) {
-    var result = arg;
-    while (!result.match(/--.*/)) {
-        result = `-${result}`;
+  let result = arg;
+  while (!/--.*/.test(result)) {
+    result = `-${result}`;
+  }
+
+  return result;
+}
+
+/**
+ * Formant Arguments
+ * @param args
+ * @returns {*}
+ */
+function formatArguments(args) {
+  if (Array.isArray(args)) {
+    return args.map((item) => formatArgument(item));
+  }
+
+  if (typeof args === 'string' || args instanceof String) {
+    return [formatArgument(args)];
+  }
+
+  console.error(`${PLUGIN_NAME} : Arguments are not passed in a valid format: ${args}`);
+  return [];
+}
+
+// Plugin level function(dealing with files)
+function gulpYarn(gulpYarnOptions) {
+  const toRun = [];
+  let count = 0;
+
+  // Creating a stream through which each file will pass
+  return through.obj((file, enc, callback) => {
+    if (file === undefined || file.isNull()) {
+      // Return empty file
+      return callback(null, file);
     }
-    return result;
+
+    const command = clone(commandList[path.basename(file.path)]);
+    if (command !== undefined) {
+      if (gulpYarnOptions) {
+        let error = null;
+        const { args, ...otherOptions } = gulpYarnOptions;
+
+        for (const [key, value] of Object.entries(otherOptions)) {
+          if (Object.prototype.hasOwnProperty.call(yarnArgs, key) && value === true) {
+            command.args.push(yarnArgs[key]);
+          } else {
+            error = new PluginError(PLUGIN_NAME, `Command '${key}' not supported.`);
+            break;
+          }
+        }
+
+        if (error) {
+          return callback(error);
+        }
+      }
+
+      if (gulpYarnOptions && gulpYarnOptions.args) {
+        command.args = flatten(command.args.concat(formatArguments(gulpYarnOptions.args)));
+      }
+
+      command.cwd = path.dirname(file.path);
+      toRun.push(command);
+
+      if (toRun.length === 0) {
+        callback(new PluginError(PLUGIN_NAME, 'No commands found to run.'));
+      }
+
+      return mapSeries(
+        toRun,
+        (singleCommand, next) => {
+          which(singleCommand.cmd)
+            .then((commandPath) => {
+              const installOptions = {
+                stdio: 'inherit',
+                shell: true,
+                cwd: singleCommand.cwd || process.cwd(),
+              };
+              const cmd = childProcess.spawn(
+                `"${commandPath}"`,
+                singleCommand.args,
+                installOptions
+              );
+              cmd.once('close', (code) => {
+                if (code !== 0) {
+                  next(
+                    new PluginError(
+                      PLUGIN_NAME,
+                      `${command.cmd} exited with non-zero code ${code}.`
+                    )
+                  );
+                } else {
+                  next();
+                }
+              });
+            })
+            .catch(() => {
+              next(new PluginError(PLUGIN_NAME, 'Error while determining the folder path.'));
+            });
+        },
+        (_error) => {
+          if (_error) {
+            return callback(_error);
+          }
+
+          return callback(null, file);
+        }
+      );
+    }
+
+    return callback();
+  });
 }
 
 // Exporting the plugin main function
