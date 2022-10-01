@@ -1,4 +1,5 @@
 .*
 test/
-/src/
-/coverage
+coverage/
+.nyc_output
+src/

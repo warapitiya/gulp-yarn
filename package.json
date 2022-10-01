@@ -2,13 +2,18 @@
   "name": "gulp-yarn",
   "version": "3.0.0",
   "description": "Automatically install node modules using Yarn.",
-  "main": "index.js",
+  "main": "src/index.ts",
   "typings": "index.d.ts",
   "scripts": {
     "commit": "npx git-cz --disable-emoji",
     "coveralls": "jest --coverage && cat coverage/lcov.info | coveralls",
     "release": "standard-version",
-    "test": "jest"
+    "test": "tap test/test.ts --ts --coverage-report=html",
+    "lint:standard": "npx standard | snazzy",
+    "lint": "eslint . --ext .ts"
+  },
+  "engines": {
+    "node": ">=14"
   },
   "repository": {
     "type": "git",
@@ -28,31 +33,29 @@
   },
   "homepage": "https://github.com/warapitiya/gulp-yarn",
   "dependencies": {
-    "async": "^2.5.0",
-    "clone": "^2.1.2",
-    "plugin-error": "^1.0.1",
-    "through2": "^2.0.3",
+    "plugin-error": "^2.0.0",
     "which": "^2.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.8",
-    "@babel/preset-env": "^7.13.9",
-    "babel-jest": "^26.6.3",
+    "@types/node": "^18.7.23",
+    "@types/proxyquire": "^1.3.28",
+    "@types/tap": "^15.0.7",
+    "@types/vinyl": "^2.0.6",
+    "@types/which": "^2.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "@typescript-eslint/parser": "^5.38.1",
     "coveralls": "^3.0.0",
-    "eslint": "^7.2.0",
-    "eslint-config-airbnb": "18.2.1",
-    "eslint-config-node": "^4.1.0",
+    "eslint": "^8.24.0",
     "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-react": "^7.21.5",
-    "eslint-plugin-react-hooks": "^1.7.0",
-    "jest": "^26.6.3",
-    "mock-spawn": "^0.2.6",
-    "prettier": "^2.1.2",
+    "prettier": "^2.7.1",
+    "proxyquire": "^2.1.3",
+    "quibble": "^0.6.14",
     "standard-version": "^9.0.0",
+    "tap": "^16.3.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4",
     "vinyl": "^2.1.0"
   }
 }
