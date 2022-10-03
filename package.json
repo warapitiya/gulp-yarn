@@ -2,22 +2,15 @@
   "name": "gulp-yarn",
   "version": "3.0.0",
   "description": "Automatically install node modules using Yarn.",
-  "main": "src/index.ts",
-  "typings": "index.d.ts",
-  "scripts": {
-    "commit": "npx git-cz --disable-emoji",
-    "coveralls": "jest --coverage && cat coverage/lcov.info | coveralls",
-    "release": "standard-version",
-    "test": "tap test/test.ts --ts --coverage-report=html",
-    "lint:standard": "npx standard | snazzy",
-    "lint": "eslint . --ext .ts"
-  },
-  "engines": {
-    "node": ">=14"
-  },
+  "author": "Malindu Warapitiya <warapitiya93@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/warapitiya/gulp-yarn",
   "repository": {
     "type": "git",
     "url": "git://github.com/warapitiya/gulp-yarn.git"
+  },
+  "bugs": {
+    "url": "https://github.com/warapitiya/gulp-yarn/issues"
   },
   "keywords": [
     "gulpplugin",
@@ -26,32 +19,33 @@
     "gulp",
     "install"
   ],
-  "author": "Malindu Warapitiya <warapitiya93@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/warapitiya/gulp-yarn/issues"
+  "main": "src/index.ts",
+  "typings": "index.d.ts",
+  "engines": {
+    "node": ">=14"
   },
-  "homepage": "https://github.com/warapitiya/gulp-yarn",
+  "scripts": {
+    "coveralls": "jest --coverage && cat coverage/lcov.info | coveralls",
+    "release": "standard-version",
+    "test": "tap test/test.ts --ts",
+    "test:report": "tap test/test.ts --ts --coverage-report=html",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
   "dependencies": {
     "plugin-error": "^2.0.0",
     "which": "^2.0.2"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^0.27.0",
     "@types/node": "^18.7.23",
-    "@types/proxyquire": "^1.3.28",
+    "@types/sinon": "^10.0.13",
     "@types/tap": "^15.0.7",
     "@types/vinyl": "^2.0.6",
     "@types/which": "^2.0.1",
-    "@typescript-eslint/eslint-plugin": "^5.38.1",
-    "@typescript-eslint/parser": "^5.38.1",
     "coveralls": "^3.0.0",
     "eslint": "^8.24.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-prettier": "^3.3.1",
-    "prettier": "^2.7.1",
-    "proxyquire": "^2.1.3",
-    "quibble": "^0.6.14",
+    "sinon": "^14.0.0",
     "standard-version": "^9.0.0",
     "tap": "^16.3.0",
     "ts-node": "^10.9.1",

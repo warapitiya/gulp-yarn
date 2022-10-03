@@ -2,26 +2,27 @@
  * Created by Malindu Warapitiya on 10/23/16.
  */
 
-import path from 'node:path';
-import { Transform } from 'node:stream';
-import { spawn, SpawnOptions } from 'node:child_process';
+import path from 'node:path'
+import { Transform } from 'node:stream'
+import type { SpawnOptions } from 'node:child_process'
+import { spawn } from 'node:child_process'
 
-import PluginError from 'plugin-error';
-import which from 'which';
+import PluginError from 'plugin-error'
+import which from 'which'
 
-import { CommandOptions } from './commands';
-import { PLUGIN_NAME, resolveYarnOptions } from './utils';
+import type { CommandOptions } from './commands'
+import { PLUGIN_NAME, resolveYarnOptions } from './utils'
 
-interface ICommandOptions {
+interface RequiredFile {
   'package.json': {
-    cmd: string;
-    cwd: string;
-    args: string[];
-    spawnOptions: SpawnOptions;
-  };
+    cmd: string
+    cwd: string
+    args: string[]
+    spawnOptions: SpawnOptions
+  }
 }
 
-const CommandOptions: ICommandOptions = {
+const requiredFileOpts: RequiredFile = {
   'package.json': {
     cmd: 'yarn',
     cwd: '',
@@ -31,66 +32,68 @@ const CommandOptions: ICommandOptions = {
       shell: true,
     },
   },
-};
+}
 
-const gulpYarn = (gulpYarnOptions: CommandOptions) => {
+const gulpYarn = (gulpYarnOptions?: Partial<CommandOptions>) => {
   return new Transform({
     objectMode: true,
     transform(chunk, encoding, callback) {
       if (chunk === undefined || chunk === null) {
         // Return empty file
-        return callback(null, chunk);
+        callback(null, chunk)
+        return
       }
 
-      const basePath = path.basename(chunk.path);
-      const command = CommandOptions[basePath as keyof ICommandOptions];
+      const basePath = path.basename(chunk.path)
+      const command = requiredFileOpts[basePath as keyof RequiredFile]
 
       // If Not specific command
       if (!command) {
-        return callback();
+        callback()
+        return
       }
 
-      const [error, listOfArgs] = resolveYarnOptions(gulpYarnOptions);
+      const [error, listOfArgs] = resolveYarnOptions(gulpYarnOptions)
 
       if (error) {
-        return callback(error);
+        callback(error)
+        return
       }
 
-      command.cwd = path.dirname(chunk.path);
-      command.args = listOfArgs;
-      command.spawnOptions.cwd = command.cwd || process.cwd();
+      command.cwd = path.dirname(chunk.path)
+      command.args = listOfArgs
+      command.spawnOptions.cwd = command.cwd || process.cwd()
 
       which(command.cmd)
         .then((commandPath) => {
-
           const cmd = spawn(
             `"${commandPath}"`,
             command.args,
             command.spawnOptions,
-          );
+          )
 
           cmd.once('close', (code) => {
             if (code !== 0) {
               const error = new PluginError(
                 PLUGIN_NAME,
                 `${command.cmd} exited with non-zero code ${code}.`,
-              );
-              return callback(error);
-            } else {
-              return callback(null, chunk);
+              )
+              callback(error)
             }
-          });
+            else {
+              callback(null, chunk)
+            }
+          })
         }).catch((error) => {
-        const catchError = new PluginError(PLUGIN_NAME, error, { showStack: true });
-        return callback(catchError);
-      });
+          const catchError = new PluginError(PLUGIN_NAME, error, { showStack: true })
+          callback(catchError)
+        })
     },
-  });
-};
-
+  })
+}
 
 // Plugin level function(dealing with files)
-module.exports = (gulpYarnOptions: CommandOptions) => {
+export default function (gulpYarnOptions?: Partial<CommandOptions>) {
   // Creating a stream through which each file will pass
-  return gulpYarn(gulpYarnOptions);
-};
+  return gulpYarn(gulpYarnOptions)
+}

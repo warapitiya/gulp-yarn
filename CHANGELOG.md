@@ -44,7 +44,7 @@ All notable changes to this project will be documented in this file. See [standa
 # 2.0.0-beta.1 (2017-10-23)
 
 * test(tests): fix test cases to support ES2015 ([19dde57](https://github.com/warapitiya/gulp-yarn/commit/19dde57))
-* feat(core): remove src and lib folders and work with index.js root file ([cbbfe92](https://github.com/warapitiya/gulp-yarn/commit/cbbfe92))
+* feat(core): remove src and lib folders and work with index.ts root file ([cbbfe92](https://github.com/warapitiya/gulp-yarn/commit/cbbfe92))
 * feat(core): simplified the code base and fix bugs ([dd74514](https://github.com/warapitiya/gulp-yarn/commit/dd74514))
 * build(gulp): add gulp support with babel ([499fa93](https://github.com/warapitiya/gulp-yarn/commit/499fa93))
 * fix(core): fix issues with async behavior ([4849558](https://github.com/warapitiya/gulp-yarn/commit/4849558))

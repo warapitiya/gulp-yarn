@@ -1,274 +1,282 @@
-import { EventEmitter } from 'node:events';
+import tap from 'tap'
+import File from 'vinyl'
+import sinon from 'sinon'
 
-import tap from 'tap';
-import File from 'vinyl';
+import { formatArgument, formatArguments, resolveYarnOptions } from '../src/utils'
+import gulpYarn from '../src'
 
-import { formatArgument, formatArguments, resolveYarnOptions } from '../src/utils';
-import { CommandOptions } from '../src/commands';
-
-import pkg from './package.json';
-
-const stdout = new EventEmitter();
-const stderr = new EventEmitter();
-const spawn = new EventEmitter();
-
-const child_process = {
-  spawn: () => spawn,
-  stdout,
-  stderr,
-};
-
-const gulpYarn = tap.mock('../src', {
-  'child_process': child_process,
-});
+import pkg from './package.json'
 
 tap.test('should warn when sending not supported args', (t) => {
-  t.plan(1);
+  t.plan(2)
+
   const fakeFile = new File({
     base: 'package',
     path: 'test/package.json',
     contents: Buffer.from(JSON.stringify(pkg)),
-  });
-  const gulpYarnObject = gulpYarn({
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    npm: true,
-  });
+  })
+  // @ts-expect-error Unit testing purpose passing invalid prop
+  const stream = gulpYarn({ npm: true })
 
-  gulpYarnObject.once('error', (error: Error) => {
-    t.equal(error.message, `'npm' option is not supported by the plugin. Please use 'args' option.`);
-    t.end();
-  });
+  stream.once('error', (error: Error) => {
+    t.type(error, Error)
+    t.equal(error.message, '\'npm\' option is not supported by the plugin. Please use \'args\' option.')
+    t.end()
+  })
 
   // write the fake file to it
-  gulpYarnObject.write(fakeFile);
-});
+  stream.write(fakeFile)
+})
 
-tap.test('should run with supported args', t => {
-  t.plan(1);
-  // create the fake file
+tap.test('should run with supported args', (t) => {
+  t.plan(1)
   const fakeFile = new File({
     base: 'package',
     path: 'test/package.json',
     contents: Buffer.from(JSON.stringify(pkg)),
-  });
+  })
 
-  // Create a gulpYarn plugin stream
-  const gulpYarnObject = gulpYarn({
-    production: true,
-  });
+  const stream = gulpYarn({ production: true })
 
-  gulpYarnObject.once('data', (file: File) => {
-    t.equal(file.isBuffer(), true);
-    t.end();
-  });
+  stream.on('data', (file: File) => {
+    t.equal(file.isBuffer(), true)
+  })
 
-  // write the fake file to it
-  gulpYarnObject.write(fakeFile);
-});
+  stream.on('end', () => {
+    t.end()
+  })
 
-tap.test('should not call two times', t => {
-  t.plan(1);
-  // create the fake file
+  stream.write(fakeFile)
+})
+
+tap.test('should not call two times', (t) => {
+  t.plan(2)
+
   const fakeFile = new File({
     base: 'package',
     path: 'test/package.json',
     contents: Buffer.from(JSON.stringify(pkg)),
-  });
+  })
 
   const fakeJSFile = new File({
     base: 'package',
     path: 'test/package.js',
     contents: Buffer.from(JSON.stringify(pkg)),
-  });
+  })
 
-  // Create a gulpYarn plugin stream
-  const gulpYarnObject = gulpYarn({
-    production: true,
-  });
+  const stream = gulpYarn({ production: true })
 
-  gulpYarnObject.once('data', (file: File) => {
-    t.equal(file.isBuffer(), true);
-    t.end();
-  });
+  const dataSpy = sinon.spy()
+  const errorSpy = sinon.spy()
+  stream.on('data', dataSpy)
+  stream.on('error', errorSpy)
 
-  // write the fake file to it
-  gulpYarnObject.write(fakeJSFile);
-  gulpYarnObject.write(fakeFile);
-});
+  stream.on('end', () => {
+    t.equal(dataSpy.callCount, 1)
+    t.equal(errorSpy.notCalled, true)
+    t.end()
+  })
 
-tap.test('should run without any arg', t => {
-  t.plan(1);
-  // create the fake file
+  stream.write(fakeJSFile)
+  stream.write(fakeFile)
+  stream.end()
+})
+
+tap.test('should run without any arg', (t) => {
+  t.plan(2)
+
   const fakeFile = new File({
     base: 'package',
     path: 'test/package.json',
     contents: Buffer.from(JSON.stringify(pkg)),
-  });
+  })
 
-  // Create a gulpYarn plugin stream
-  const gulpYarnObject = gulpYarn();
+  const stream = gulpYarn()
 
-  gulpYarnObject.once('data', (file: File) => {
-    t.equal(file.isBuffer(), true);
-    t.end();
-  });
+  const spy = sinon.spy()
+  stream.on('error', spy)
 
-  // write the fake file to it
-  gulpYarnObject.write(fakeFile);
-});
+  stream.on('data', (file: File) => {
+    t.equal(file.isBuffer(), true)
+  })
 
-tap.test('should not run with empty file', t => {
-  // create the fake file
+  stream.on('end', () => {
+    t.equal(spy.notCalled, true)
+    t.end()
+  })
+
+  stream.write(fakeFile)
+  stream.end()
+})
+
+tap.test('should not run with empty file', (t) => {
+  t.plan(2)
+
   const fakeFile = new File({
     base: 'package',
     path: 'test/package.json',
-  });
+    contents: undefined,
+  })
 
-  // Create a gulpYarn plugin stream
-  const gulpYarnObject = gulpYarn({
-    production: true,
-  });
+  const stream = gulpYarn({ production: true })
 
-  // wait for the file to come back out
-  gulpYarnObject.once('data', (file: File) => {
-    // make sure it came out the same way it went in
-    t.equal(file.isBuffer(), false);
-    t.end();
-  });
+  const spy = sinon.spy()
+  stream.on('error', spy)
 
-  // write the fake file to it
-  gulpYarnObject.write(fakeFile);
-});
+  stream.once('data', (file: File) => {
+    t.equal(file.isBuffer(), false)
+  })
 
-tap.test(`should run with args as array`, t => {
-  t.plan(1);
-  // create the fake file
+  stream.on('end', () => {
+    t.equal(spy.notCalled, true)
+    t.end()
+  })
+
+  stream.write(fakeFile)
+  stream.end()
+})
+
+tap.test('should not run for undefined buffers', (t) => {
+  t.plan(2)
+  const stream = gulpYarn({ production: true })
+
+  const errorSpy = sinon.spy()
+  const dataSpy = sinon.spy()
+  stream.on('error', errorSpy)
+  stream.on('data', dataSpy)
+
+  stream.on('end', () => {
+    t.equal(errorSpy.notCalled, true)
+    t.equal(dataSpy.notCalled, true)
+    t.end()
+  })
+
+  stream.write(undefined)
+  stream.end()
+})
+
+tap.test('should run with args as array', (t) => {
+  t.plan(2)
+
   const fakeFile = new File({
     base: 'package',
     path: 'test/package.json',
     contents: Buffer.from(JSON.stringify(pkg)),
-  });
+  })
 
-  // Create a gulpYarn plugin stream
-  const gulpYarnObject = gulpYarn({
-    args: ['--production', '--no-bin-links'],
-  });
+  const stream = gulpYarn({ args: ['--production', '--no-bin-links'] })
 
-  // wait for the file to come back out
-  gulpYarnObject.once('data', (file: File) => {
-    // make sure it came out the same way it went in
-    t.equal(file.isBuffer(), true);
-    t.end();
-  });
+  const spy = sinon.spy()
+  stream.on('error', spy)
 
-  // write the fake file to it
-  gulpYarnObject.write(fakeFile);
-});
+  stream.once('data', (file: File) => {
+    t.equal(file.isBuffer(), true)
+    t.equal(spy.notCalled, true)
+    t.end()
+  })
 
-tap.test(`should run with args as string`, t => {
-  t.plan(1);
-  // create the fake file
+  stream.write(fakeFile)
+  stream.end()
+})
+
+tap.test('should run with args as string', (t) => {
+  t.plan(2)
+
   const fakeFile = new File({
     base: 'package',
     path: 'test/package.json',
     contents: Buffer.from(JSON.stringify(pkg)),
-  });
+  })
 
-  // Create a gulpYarn plugin stream
-  const gulpYarnObject = gulpYarn({
-    args: '--production --no-bin-links',
-  });
+  const stream = gulpYarn({ args: '--production --no-bin-links' })
 
-  // wait for the file to come back out
-  gulpYarnObject.once('data', (file: File) => {
-    // make sure it came out the same way it went in
-    t.equal(file.isBuffer(), true);
-    t.end();
-  });
+  const spy = sinon.spy()
+  stream.on('error', spy)
 
-  // write the fake file to it
-  gulpYarnObject.write(fakeFile);
-});
+  stream.once('data', (file: File) => {
+    t.equal(file.isBuffer(), true)
+    t.equal(spy.notCalled, true)
+    t.end()
+  })
 
-tap.test('formatArgument()', t => {
-  t.plan(8);
-  t.equal(formatArgument('production'), '--production');
-  t.equal(formatArgument('--production'), '--production');
-  t.equal(formatArgument('-production'), '--production');
-  t.equal(formatArgument('production --nice-work'), '--production --nice-work');
-  t.equal(formatArgument('--production nice-work'), '--production --nice-work');
-  t.equal(formatArgument('--production -nice-work'), '--production --nice-work');
-  t.equal(formatArgument('--production     --nice-work'), '--production --nice-work');
-  t.equal(formatArgument('--production     -nice-work'), '--production --nice-work');
-  t.end();
-});
+  stream.write(fakeFile)
+  stream.end()
+})
 
-tap.test('formatArguments()', t => {
-  t.plan(9);
-  t.same(formatArguments(['production']), ['--production']);
-  t.same(formatArguments(['--production']), ['--production']);
-  t.same(formatArguments(['-production']), ['--production']);
-  t.same(formatArguments(['production', '--nice-work']), ['--production', '--nice-work']);
-  t.same(formatArguments(['--production', 'nice-work']), ['--production', '--nice-work']);
-  t.same(formatArguments(['--production', '-nice-work']), ['--production', '--nice-work']);
-  t.same(formatArguments(['--production', '    --nice-work']), ['--production', '--nice-work']);
-  t.same(formatArguments(['--production', '    -nice-work']), ['--production', '--nice-work']);
-  t.same(formatArguments('--production    -nice-work'), ['--production --nice-work']);
-  t.end();
-});
+tap.test('formatArgument() returns formatted argument', (t) => {
+  t.plan(8)
+  t.equal(formatArgument('production'), '--production')
+  t.equal(formatArgument('--production'), '--production')
+  t.equal(formatArgument('-production'), '--production')
+  t.equal(formatArgument('production --nice-work'), '--production --nice-work')
+  t.equal(formatArgument('--production nice-work'), '--production --nice-work')
+  t.equal(formatArgument('--production -nice-work'), '--production --nice-work')
+  t.equal(formatArgument('--production     --nice-work'), '--production --nice-work')
+  t.equal(formatArgument('--production     -nice-work'), '--production --nice-work')
+  t.end()
+})
 
-tap.test('resolveYarnOptions()', t => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  let [error] = resolveYarnOptions({ test: true });
-  t.equal(error?.message, `'test' option is not supported by the plugin. Please use 'args' option.`);
+tap.test('formatArguments() returns formatted arguments', (t) => {
+  t.plan(9)
+  t.same(formatArguments(['production']), ['--production'])
+  t.same(formatArguments(['--production']), ['--production'])
+  t.same(formatArguments(['-production']), ['--production'])
+  t.same(formatArguments(['production', '--nice-work']), ['--production', '--nice-work'])
+  t.same(formatArguments(['--production', 'nice-work']), ['--production', '--nice-work'])
+  t.same(formatArguments(['--production', '-nice-work']), ['--production', '--nice-work'])
+  t.same(formatArguments(['--production', '    --nice-work']), ['--production', '--nice-work'])
+  t.same(formatArguments(['--production', '    -nice-work']), ['--production', '--nice-work'])
+  t.same(formatArguments('--production    -nice-work'), ['--production --nice-work'])
+  t.end()
+})
 
-  let [arg1, arg2] = resolveYarnOptions({ dev: true } as CommandOptions);
-  t.equal(arg1, null);
+tap.test('resolveYarnOptions()', (t) => {
+  // @ts-expect-error Unit testing purpose passing invalid property
+  let [error] = resolveYarnOptions({ test: true })
+  t.equal(error?.message, '\'test\' option is not supported by the plugin. Please use \'args\' option.')
+
+  let [arg1, arg2] = resolveYarnOptions({ dev: true })
+  t.equal(arg1, null)
   t.same(arg2, ['--dev']);
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  [error] = resolveYarnOptions({ args: {} });
-  t.equal(error?.message, `'Args" option is not in valid type.`);
+  // @ts-expect-error Unit testing purpose
+  [error] = resolveYarnOptions({ args: {} })
+  t.equal(error?.message, '\'Args" option is not in valid type.');
 
-  [arg1, arg2] = resolveYarnOptions({ args: ['done'] } as CommandOptions);
-  t.equal(arg1, null);
+  [arg1, arg2] = resolveYarnOptions({ args: ['done'] })
+  t.equal(arg1, null)
   t.same(arg2, ['--done']);
 
-  [arg1, arg2] = resolveYarnOptions({ force: true, args: ['done'] } as CommandOptions);
-  t.equal(arg1, null);
+  [arg1, arg2] = resolveYarnOptions({ force: true, args: ['done'] })
+  t.equal(arg1, null)
   t.same(arg2, ['--force', '--done']);
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  [arg1, arg2] = resolveYarnOptions();
-  t.equal(arg1, null);
-  t.same(arg2, []);
-  t.end();
-});
+  [arg1, arg2] = resolveYarnOptions()
+  t.equal(arg1, null)
+  t.same(arg2, [])
+  t.end()
+})
 
-tap.test(`args should start with dashes`, t => {
-  t.plan(1);
-  // create the fake file
+tap.test('args should start with dashes', (t) => {
+  t.plan(2)
+
   const fakeFile = new File({
     base: 'package',
     path: 'test/package.json',
     contents: Buffer.from(JSON.stringify(pkg)),
-  });
+  })
 
-  // Create a gulpYarn plugin stream
-  const gulpYarnObject = gulpYarn({
-    args: 'production --no-bin-links',
-  });
+  const stream = gulpYarn({ args: 'production --no-bin-links' })
 
-  // wait for the file to come back out
-  gulpYarnObject.once('data', (file: File) => {
-    t.equal(file.isBuffer(), true);
-    t.end();
-  });
+  const spy = sinon.spy()
+  stream.on('error', spy)
 
-  // write the fake file to it
-  gulpYarnObject.write(fakeFile);
-});
+  stream.once('data', (file: File) => {
+    t.equal(file.isBuffer(), true)
+    t.equal(spy.notCalled, true)
+    t.end()
+  })
+
+  stream.write(fakeFile)
+  stream.end()
+})
