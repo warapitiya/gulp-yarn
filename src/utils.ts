@@ -70,7 +70,7 @@ export const resolveYarnOptions = (gulpYarnOptions?: Partial<CommandOptions>): [
       return [null, listOfCommands]
     }
     else {
-      const error = new PluginError(PLUGIN_NAME, '\'Args" option is not in valid type.')
+      const error = new PluginError(PLUGIN_NAME, '"Args" option is not in valid type.')
       return [error, []]
     }
   }

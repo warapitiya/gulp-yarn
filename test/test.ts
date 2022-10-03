@@ -2,6 +2,8 @@ import tap from 'tap'
 import File from 'vinyl'
 import sinon from 'sinon'
 
+import which from 'which'
+import PluginError from 'plugin-error'
 import { formatArgument, formatArguments, resolveYarnOptions } from '../src/utils'
 import gulpYarn from '../src'
 
@@ -241,7 +243,7 @@ tap.test('resolveYarnOptions()', (t) => {
 
   // @ts-expect-error Unit testing purpose
   [error] = resolveYarnOptions({ args: {} })
-  t.equal(error?.message, '\'Args" option is not in valid type.');
+  t.equal(error?.message, '"Args" option is not in valid type.');
 
   [arg1, arg2] = resolveYarnOptions({ args: ['done'] })
   t.equal(arg1, null)
@@ -274,6 +276,29 @@ tap.test('args should start with dashes', (t) => {
   stream.once('data', (file: File) => {
     t.equal(file.isBuffer(), true)
     t.equal(spy.notCalled, true)
+    t.end()
+  })
+
+  stream.write(fakeFile)
+  stream.end()
+})
+
+tap.test('handle "which" module error', (t) => {
+  t.plan(2)
+  sinon.stub(which, 'sync').throws(new Error('Unit testing error'))
+
+  const fakeFile = new File({
+    base: 'package',
+    path: 'test/package.json',
+    contents: Buffer.from(JSON.stringify(pkg)),
+  })
+
+  const stream = gulpYarn()
+
+  stream.on('error', (err: Error) => {
+    t.type(err, PluginError)
+    t.equal(err.message, 'Unit testing error')
+    sinon.restore()
     t.end()
   })
 

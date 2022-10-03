@@ -28,6 +28,7 @@
     "coveralls": "jest --coverage && cat coverage/lcov.info | coveralls",
     "release": "standard-version",
     "test": "tap test/test.ts --ts",
+    "test:only": "tap test/test.ts --ts -O",
     "test:report": "tap test/test.ts --ts --coverage-report=html",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"

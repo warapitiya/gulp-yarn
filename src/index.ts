@@ -63,31 +63,30 @@ const gulpYarn = (gulpYarnOptions?: Partial<CommandOptions>) => {
       command.cwd = path.dirname(chunk.path)
       command.args = listOfArgs
       command.spawnOptions.cwd = command.cwd || process.cwd()
+      try {
+        const commandPath = which.sync(command.cmd)
+        const cmd = spawn(
+          `"${commandPath}"`,
+          command.args,
+          command.spawnOptions,
+        )
 
-      which(command.cmd)
-        .then((commandPath) => {
-          const cmd = spawn(
-            `"${commandPath}"`,
-            command.args,
-            command.spawnOptions,
-          )
-
-          cmd.once('close', (code) => {
-            if (code !== 0) {
-              const error = new PluginError(
-                PLUGIN_NAME,
-                `${command.cmd} exited with non-zero code ${code}.`,
-              )
-              callback(error)
-            }
-            else {
-              callback(null, chunk)
-            }
-          })
-        }).catch((error) => {
-          const catchError = new PluginError(PLUGIN_NAME, error, { showStack: true })
-          callback(catchError)
+        cmd.once('close', (code) => {
+          if (code !== 0) {
+            const error = new PluginError(
+              PLUGIN_NAME,
+              `${command.cmd} exited with non-zero code ${code}.`,
+            )
+            callback(error)
+            return
+          }
+          callback(null, chunk)
         })
+      }
+      catch (error: unknown) {
+        const catchError = new PluginError(PLUGIN_NAME, error as Error, { showStack: true })
+        callback(catchError)
+      }
     },
   })
 }
