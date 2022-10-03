@@ -1,6 +1,7 @@
 {
   "name": "gulp-yarn",
   "version": "3.0.0",
+  "private": false,
   "description": "Automatically install node modules using Yarn.",
   "author": "Malindu Warapitiya <warapitiya93@gmail.com>",
   "license": "MIT",
@@ -27,9 +28,9 @@
   "scripts": {
     "coveralls": "jest --coverage && cat coverage/lcov.info | coveralls",
     "release": "standard-version",
-    "test": "tap test/test.ts --ts",
-    "test:only": "tap test/test.ts --ts -O",
-    "test:report": "tap test/test.ts --ts --coverage-report=html",
+    "test": "tap test --ts",
+    "test:only": "tap test --ts -O",
+    "test:report": "tap test --ts --coverage-report=html",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -46,6 +47,7 @@
     "@types/which": "^2.0.1",
     "coveralls": "^3.0.0",
     "eslint": "^8.24.0",
+    "mock-spawn": "^0.2.6",
     "sinon": "^14.0.0",
     "standard-version": "^9.0.0",
     "tap": "^16.3.0",

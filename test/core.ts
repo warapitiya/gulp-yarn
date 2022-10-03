@@ -1,6 +1,10 @@
+import child_process from 'child_process'
 import tap from 'tap'
 import File from 'vinyl'
+import type { SinonSpy } from 'sinon'
 import sinon from 'sinon'
+// @ts-expect-error mock-spawn has no @typings
+import mockSpawn from 'mock-spawn'
 
 import which from 'which'
 import PluginError from 'plugin-error'
@@ -8,6 +12,28 @@ import { formatArgument, formatArguments, resolveYarnOptions } from '../src/util
 import gulpYarn from '../src'
 
 import pkg from './package.json'
+
+const spawnSandbox = mockSpawn()
+const oldSpawn = child_process.spawn
+let spawnSpy: SinonSpy
+
+tap.before(() => {
+  child_process.spawn = spawnSandbox
+  spawnSpy = sinon.spy(child_process, 'spawn')
+})
+
+tap.beforeEach(() => {
+  spawnSpy.resetHistory()
+})
+
+// tap.afterEach(() => {
+//   sinon.restore()
+// })
+
+tap.teardown(() => {
+  child_process.spawn = oldSpawn
+  spawnSpy.restore()
+})
 
 tap.test('should warn when sending not supported args', (t) => {
   t.plan(2)
@@ -17,7 +43,7 @@ tap.test('should warn when sending not supported args', (t) => {
     path: 'test/package.json',
     contents: Buffer.from(JSON.stringify(pkg)),
   })
-  // @ts-expect-error Unit testing purpose passing invalid prop
+  // @ts-expect-error passing invalid prop for unit testing purpose
   const stream = gulpYarn({ npm: true })
 
   stream.once('error', (error: Error) => {
@@ -26,8 +52,8 @@ tap.test('should warn when sending not supported args', (t) => {
     t.end()
   })
 
-  // write the fake file to it
   stream.write(fakeFile)
+  stream.end()
 })
 
 tap.test('should run with supported args', (t) => {
@@ -49,6 +75,7 @@ tap.test('should run with supported args', (t) => {
   })
 
   stream.write(fakeFile)
+  stream.end()
 })
 
 tap.test('should not call two times', (t) => {
@@ -298,10 +325,10 @@ tap.test('handle "which" module error', (t) => {
   stream.on('error', (err: Error) => {
     t.type(err, PluginError)
     t.equal(err.message, 'Unit testing error')
-    sinon.restore()
     t.end()
   })
 
   stream.write(fakeFile)
   stream.end()
 })
+
