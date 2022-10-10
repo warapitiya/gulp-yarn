@@ -10,5 +10,6 @@ cache:
 install:
   - yarn install --immutable --immutable-cache --check-cache
 script:
+  - yarn lint
   - yarn test
   - yarn coveralls
