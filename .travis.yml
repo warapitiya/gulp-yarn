@@ -8,7 +8,7 @@ cache:
   directories:
     - node_modules
 install:
-  - yarn install
+  - yarn install --immutable --immutable-cache --check-cache
 script:
   - yarn test
   - yarn coveralls

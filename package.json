@@ -26,11 +26,11 @@
     "node": ">=14"
   },
   "scripts": {
-    "coveralls": "jest --coverage && cat coverage/lcov.info | coveralls",
     "release": "standard-version",
     "test": "tap test --ts",
     "test:only": "tap test --ts -O",
     "test:report": "tap test --ts --coverage-report=html",
+    "coveralls": "tap test --ts --coverage-report=text-lcov | coveralls",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -45,7 +45,7 @@
     "@types/tap": "^15.0.7",
     "@types/vinyl": "^2.0.6",
     "@types/which": "^2.0.1",
-    "coveralls": "^3.0.0",
+    "coveralls": "^3.1.1",
     "eslint": "^8.24.0",
     "eslint-plugin-import": "^2.26.0",
     "mock-spawn": "^0.2.6",
