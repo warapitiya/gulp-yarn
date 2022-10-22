@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2018",
+    "target": "ES2020",
     "module": "commonjs",
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -8,7 +8,14 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "lib",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "strictNullChecks": true,
+
+    /* Additional Checks */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
   },
   "exclude": [
     "test"
