@@ -1,14 +1,17 @@
 sudo: false
+dist: focal
 language: node_js
 node_js:
-  - '10'
-  - '12'
   - '14'
+  - '16'
+  - '18'
 cache:
   directories:
     - node_modules
 install:
-  - yarn install
+  - yarn install --immutable --immutable-cache --check-cache
 script:
+  - yarn lint
   - yarn test
+after_success:
   - yarn coveralls
