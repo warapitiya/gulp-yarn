@@ -1,18 +1,17 @@
 {
   "name": "gulp-yarn",
   "version": "3.0.0",
+  "private": false,
   "description": "Automatically install node modules using Yarn.",
-  "main": "index.js",
-  "typings": "index.d.ts",
-  "scripts": {
-    "commit": "npx git-cz --disable-emoji",
-    "coveralls": "jest --coverage && cat coverage/lcov.info | coveralls",
-    "release": "standard-version",
-    "test": "jest"
-  },
+  "author": "Malindu Warapitiya <warapitiya93@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/warapitiya/gulp-yarn",
   "repository": {
     "type": "git",
     "url": "git://github.com/warapitiya/gulp-yarn.git"
+  },
+  "bugs": {
+    "url": "https://github.com/warapitiya/gulp-yarn/issues"
   },
   "keywords": [
     "gulpplugin",
@@ -21,38 +20,43 @@
     "gulp",
     "install"
   ],
-  "author": "Malindu Warapitiya <warapitiya93@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/warapitiya/gulp-yarn/issues"
+  "main": "src/index.ts",
+  "typings": "index.d.ts",
+  "engines": {
+    "node": ">=14"
   },
-  "homepage": "https://github.com/warapitiya/gulp-yarn",
+  "scripts": {
+    "release": "standard-version",
+    "test": "tap test --ts",
+    "test:only": "tap test --ts -O",
+    "test:report": "tap test --ts --coverage-report=html",
+    "coveralls": "tap test --ts --coverage-report=text-lcov | coveralls",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
   "dependencies": {
-    "async": "^2.5.0",
-    "clone": "^2.1.2",
-    "plugin-error": "^1.0.1",
-    "through2": "^2.0.3",
+    "plugin-error": "^2.0.0",
     "which": "^2.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.8",
-    "@babel/preset-env": "^7.13.9",
-    "babel-jest": "^26.6.3",
-    "coveralls": "^3.0.0",
-    "eslint": "^7.2.0",
-    "eslint-config-airbnb": "18.2.1",
-    "eslint-config-node": "^4.1.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-react": "^7.21.5",
-    "eslint-plugin-react-hooks": "^1.7.0",
-    "jest": "^26.6.3",
+    "@antfu/eslint-config": "^0.27.0",
+    "@types/node": "^18.7.23",
+    "@types/sinon": "^10.0.13",
+    "@types/tap": "^15.0.7",
+    "@types/vinyl": "^2.0.6",
+    "@types/which": "^2.0.1",
+    "coveralls": "^3.1.1",
+    "eslint": "^8.24.0",
+    "eslint-plugin-import": "^2.26.0",
     "mock-spawn": "^0.2.6",
-    "prettier": "^2.1.2",
+    "sinon": "^14.0.0",
     "standard-version": "^9.0.0",
+    "tap": "^16.3.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4",
     "vinyl": "^2.1.0"
+  },
+  "tap": {
+    "check-coverage": false
   }
 }

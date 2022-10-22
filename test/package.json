@@ -1,31 +1,31 @@
 {
-    "name": "gulp-yarn-test",
-    "version": "0.0.0",
-    "description": "GulpYarn test pkg.",
-    "main": "index.js",
-    "typings": "index.d.ts",
-    "private": true,
-    "scripts": {
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/warapitiya/gulp-yarn.git"
-    },
-    "keywords": [
-        "gulpplugin",
-        "yarn",
-        "yarnpkg",
-        "gulp",
-        "install"
-    ],
-    "author": "Malindu Warapitiya <warapitiya93@gmail.com>",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/warapitiya/gulp-yarn/issues"
-    },
-    "homepage": "https://github.com/warapitiya/gulp-yarn",
-    "dependencies": {
-    },
-    "devDependencies": {
-    }
+  "name": "gulp-yarn-test",
+  "version": "0.0.0",
+  "private": true,
+  "description": "GulpYarn test pkg.",
+  "author": "Malindu Warapitiya <warapitiya93@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/warapitiya/gulp-yarn",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/warapitiya/gulp-yarn.git"
+  },
+  "bugs": {
+    "url": "https://github.com/warapitiya/gulp-yarn/issues"
+  },
+  "keywords": [
+    "gulpplugin",
+    "yarn",
+    "yarnpkg",
+    "gulp",
+    "install"
+  ],
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "scripts": {
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
 }

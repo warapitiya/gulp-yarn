@@ -44,8 +44,10 @@ jspm_packages
 *.tgz
 
 /.idea
-/lib/
+lib/
 build/
 
 # OS
 .DS_Store
+
+test/yarn.lock
