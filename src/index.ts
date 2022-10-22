@@ -37,7 +37,7 @@ const requiredFileOpts: RequiredFile = {
 const gulpYarn = (gulpYarnOptions?: Partial<CommandOptions>) => {
   return new Transform({
     objectMode: true,
-    transform(chunk, encoding, callback) {
+    transform(chunk, _encoding, callback) {
       if (chunk === undefined || chunk === null) {
         // Return empty file
         callback(null, chunk)

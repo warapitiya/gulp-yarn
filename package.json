@@ -20,19 +20,20 @@
     "gulp",
     "install"
   ],
-  "main": "src/index.ts",
+  "main": "lib/index.js",
   "typings": "index.d.ts",
   "engines": {
     "node": ">=14"
   },
   "scripts": {
+    "build": "tsc",
+    "coveralls": "tap test --ts --coverage-report=text-lcov | coveralls",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "release": "standard-version",
     "test": "tap test --ts",
     "test:only": "tap test --ts -O",
-    "test:report": "tap test --ts --coverage-report=html",
-    "coveralls": "tap test --ts --coverage-report=text-lcov | coveralls",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "test:report": "tap test --ts --coverage-report=html"
   },
   "dependencies": {
     "plugin-error": "^2.0.0",
