@@ -2,5 +2,8 @@
   "extends": ["@antfu", "plugin:import/recommended", "plugin:import/typescript"],
   "rules": {
     "import/order": ["error", {"newlines-between": "always-and-inside-groups"}]
-  }
+  },
+  "ignorePatterns": [
+    "lib/**"
+  ]
 }

@@ -10,7 +10,6 @@
     "outDir": "lib",
     "moduleResolution": "node",
     "strictNullChecks": true,
-
     /* Additional Checks */
     "noUnusedLocals": true,
     "noUnusedParameters": true,

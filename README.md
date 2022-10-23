@@ -12,7 +12,7 @@ Because we <img alt="emoji=heart" src="https://github.com/warapitiya/assets/blob
 
 <p align="center">
   <a href="https://travis-ci.com/warapitiya/gulp-yarn"><img alt="Travis Status" src="https://travis-ci.org/warapitiya/gulp-yarn.svg?branch=master"></a>
-  <a href='https://coveralls.io/github/warapitiya/gulp-yarn?branch=master'><img src='https://coveralls.io/repos/github/warapitiya/gulp-yarn/badge.svg?branch=master' alt='Coverage Status' /></a>
+  <a href='https://coveralls.io/github/warapitiya/gulp-yarn?branch=main'><img src='https://coveralls.io/repos/github/warapitiya/gulp-yarn/badge.svg?branch=main' alt='Coverage Status' /></a>
   <a href="https://www.npmjs.com/package/gulp-yarn"><img src="https://img.shields.io/npm/v/gulp-yarn.svg" alt="npm version"></a>
   <a href="https://www.npmjs.com/package/gulp-yarn"><img src="https://img.shields.io/npm/dt/gulp-yarn.svg" alt="npm downloads"></a>
   <a href="https://eslint.org"><img src="https://img.shields.io/badge/code%20style-eslint-blue" alt="eslint"></a>
