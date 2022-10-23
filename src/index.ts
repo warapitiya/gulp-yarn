@@ -92,7 +92,5 @@ const gulpYarn = (gulpYarnOptions?: Partial<CommandOptions>) => {
 }
 
 // Plugin level function(dealing with files)
-export default function (gulpYarnOptions?: Partial<CommandOptions>) {
-  // Creating a stream through which each file will pass
-  return gulpYarn(gulpYarnOptions)
-}
+gulpYarn.default = gulpYarn
+export = gulpYarn
