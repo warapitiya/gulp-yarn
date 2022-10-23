@@ -43,29 +43,29 @@ $ yarn add gulp-yarn -D
 **BASIC:** Better performance when in same directory.
 
 ```javascript
-var gulp = require('gulp');
+const { src } = require('gulp');
 var yarn = require('gulp-yarn');
 
-gulp.task('yarn', function() {
-  return gulp.src(['./package.json'])
+const yarnTask = function () {
+  return src(['./package.json'])
     .pipe(yarn());
-});
+};
 
 ```
 
 **PRO:** Remember to include `yarn.lock` file.
 
 ```javascript
-var gulp = require('gulp');
+const { src, dest } = require('gulp');
 var yarn = require('gulp-yarn');
 
-gulp.task('yarn', function() {
-  return gulp.src(['./package.json', './yarn.lock'])
-    .pipe(gulp.dest('./dist'))
+const yarnTask = function () {
+  return src(['./package.json'])
+    .pipe(dest('./dist'))
     .pipe(yarn({
       production: true
     }));
-});
+};
 ```
 
 ## Options
