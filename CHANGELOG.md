@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/warapitiya/gulp-yarn/compare/v3.0.0...v4.0.0) (2022-10-23)
+
+
+### Features
+
+* support typescript ([#48](https://github.com/warapitiya/gulp-yarn/issues/48)) ([b18e52e](https://github.com/warapitiya/gulp-yarn/commit/b18e52e27ab958316a107d38a522396f8a9da66d))
+
+
+### Bug Fixes
+
+* default export to support commonjs ([dc4fcb6](https://github.com/warapitiya/gulp-yarn/commit/dc4fcb6c858024a6359a7b6acf28fe5624405dcf))
+
 ## [3.0.0](https://github.com/warapitiya/gulp-yarn/compare/v2.0.0-beta.2...v3.0.0) (2021-03-03)
 
 
