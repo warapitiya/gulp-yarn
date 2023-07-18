@@ -15,14 +15,7 @@ export const PLUGIN_NAME = 'gulpYarn'
  * @param args string
  */
 export const formatArgument = (args: string): string => {
-  const arg = args.trim().replace(/\s\s+/g, ' ').split(/\s/)
-  return arg.map((l) => {
-    let result = l
-    while (!/--.*/.test(result))
-      result = `-${result}`
-
-    return result
-  }).join(' ')
+  return args.trim()
 }
 
 /**

@@ -4,28 +4,27 @@ import { formatArgument, formatArguments, resolveYarnOptions } from '../src/util
 
 tap.test('formatArgument() returns formatted argument', (t) => {
   t.plan(8)
-  t.equal(formatArgument('production'), '--production')
+  t.equal(formatArgument('production'), 'production')
   t.equal(formatArgument('--production'), '--production')
-  t.equal(formatArgument('-production'), '--production')
-  t.equal(formatArgument('production --nice-work'), '--production --nice-work')
-  t.equal(formatArgument('--production nice-work'), '--production --nice-work')
-  t.equal(formatArgument('--production -nice-work'), '--production --nice-work')
-  t.equal(formatArgument('--production     --nice-work'), '--production --nice-work')
-  t.equal(formatArgument('--production     -nice-work'), '--production --nice-work')
+  t.equal(formatArgument('-production'), '-production')
+  t.equal(formatArgument('production --nice-work'), 'production --nice-work')
+  t.equal(formatArgument('--production nice-work'), '--production nice-work')
+  t.equal(formatArgument('--production -nice-work'), '--production -nice-work')
+  t.equal(formatArgument(' --production --nice-work '), '--production --nice-work')
   t.end()
 })
 
 tap.test('formatArguments() returns formatted arguments', (t) => {
   t.plan(9)
-  t.same(formatArguments(['production']), ['--production'])
+  t.same(formatArguments(['production']), ['production'])
   t.same(formatArguments(['--production']), ['--production'])
-  t.same(formatArguments(['-production']), ['--production'])
-  t.same(formatArguments(['production', '--nice-work']), ['--production', '--nice-work'])
-  t.same(formatArguments(['--production', 'nice-work']), ['--production', '--nice-work'])
-  t.same(formatArguments(['--production', '-nice-work']), ['--production', '--nice-work'])
+  t.same(formatArguments(['-production']), ['-production'])
+  t.same(formatArguments(['production', '--nice-work']), ['production', '--nice-work'])
+  t.same(formatArguments(['--production', 'nice-work']), ['--production', 'nice-work'])
+  t.same(formatArguments(['--production', '-nice-work']), ['--production', '-nice-work'])
   t.same(formatArguments(['--production', '    --nice-work']), ['--production', '--nice-work'])
-  t.same(formatArguments(['--production', '    -nice-work']), ['--production', '--nice-work'])
-  t.same(formatArguments('--production    -nice-work'), ['--production --nice-work'])
+  t.same(formatArguments(['--production', '    -nice-work  ']), ['--production', '-nice-work'])
+  t.same(formatArguments('--production    -nice-work'), ['--production    -nice-work'])
   t.end()
 })
 
@@ -44,11 +43,11 @@ tap.test('resolveYarnOptions() can resolve passed options', (t) => {
 
   [arg1, arg2] = resolveYarnOptions({ args: ['done'] })
   t.equal(arg1, null)
-  t.same(arg2, ['--done']);
+  t.same(arg2, ['done']);
 
-  [arg1, arg2] = resolveYarnOptions({ force: true, args: ['done'] })
+  [arg1, arg2] = resolveYarnOptions({ force: true, args: '--registry https://www.google.com' })
   t.equal(arg1, null)
-  t.same(arg2, ['--force', '--done']);
+  t.same(arg2, ['--force', '--registry https://www.google.com']);
 
   [arg1, arg2] = resolveYarnOptions()
   t.equal(arg1, null)
