@@ -1,8 +1,7 @@
 {
   "name": "gulp-yarn",
   "type": "commonjs",
-  "version": "4.0.0",
-  "private": false,
+  "version": "4.0.1",
   "description": "Automatically install node modules using Yarn.",
   "author": "Malindu Warapitiya <warapitiya93@gmail.com>",
   "license": "MIT",

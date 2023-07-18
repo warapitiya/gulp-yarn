@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.1](https://github.com/warapitiya/gulp-yarn/compare/v4.0.0...v4.0.1) (2023-07-18)
+
+
+### Bug Fixes
+
+* refactor args formatting ([#52](https://github.com/warapitiya/gulp-yarn/issues/52)) ([9f1d12f](https://github.com/warapitiya/gulp-yarn/commit/9f1d12f3737af1a172d9e683bb7c2f2aeb9c8ce6))
+
 ## [4.0.0](https://github.com/warapitiya/gulp-yarn/compare/v3.0.0...v4.0.0) (2022-10-23)
 
 
